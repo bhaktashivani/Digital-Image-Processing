@@ -1,0 +1,473 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>ECE 253, Homework 1</title><meta name="generator" content="MATLAB 9.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-10-07"><meta name="DC.source" content="HW1.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>ECE 253, Homework 1</h1><!--introduction--><p><i><b><tt>Shivani Bhakta</tt></b></i></p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Problem 1 Cleaning by cluster removal</a></li><li><a href="#2"><i>Part(a)</i></a></li><li><a href="#4"><i>Part(b)</i></a></li><li><a href="#5"><i>Part(c)</i></a></li><li><a href="#6">Problem 2 Erosion and Dilation</a></li><li><a href="#7"><i>Part(a)</i></a></li><li><a href="#12"><i>Part(b)</i></a></li><li><a href="#15"><i>Part(c)</i></a></li></ul></div><h2 id="1">Problem 1 Cleaning by cluster removal</h2><pre class="codeinput">clc; clear;
+<span class="comment">% Load binary images (Data)</span>
+load(<span class="string">'badImFile.mat'</span>, <span class="string">'badIm'</span>);
+load(<span class="string">'idealImFile.mat'</span>, <span class="string">'idealIm'</span>);
+</pre><h2 id="2"><i>Part(a)</i></h2><pre class="codeinput">x = 1:2500;
+y = zeros(1,2500);
+
+<span class="keyword">for</span> P = 1:2500
+    cleanP = 1 - bwareaopen(1-badIm,P);
+    y(:,P) = sum(sum(xor(idealIm,cleanP)));
+<span class="keyword">end</span>
+
+figure()
+plot(x,y)
+title(<span class="string">'Question 1 - Part(a)'</span>)
+xlabel(<span class="string">'# of pixels P (objs w/ &lt; P pixels gets removed)'</span>)
+ylabel(<span class="string">'# of Bad Pixels'</span>)
+</pre><img vspace="5" hspace="5" src="HW1_01.png" alt=""> <h2 id="4"><i>Part(b)</i></h2><p>The plot above shows that the number of bad pixels decreases at first as the P increases, this is understandable because all the objects with fewer than P pixels are getting removed. This means all the small to medium objects (aka the random noise) in the image is being removed and image is becoming closer to the ideal image. However, after some P values between 500-1k, the badpixels numbers starts to increase again. This is mainly because now the larger portions aka the chapter number/title and even parts of the large black lines are also being removed, as the P value increases. It is not monotonic because the image is very noisy and some objects are pixels are not clearly separable, specially the background images in the title of the chapter.</p><h2 id="5"><i>Part(c)</i></h2><pre class="codeinput">[minP, miny] = min(y);  <span class="comment">%695, 48730</span>
+fprintf(<span class="string">'The minimum value of the curve is %i.\n'</span>, minP);
+fprintf(<span class="string">'This minimum occurs at the x value of %i.\n'</span>, miny);
+
+clean695 = 1 - bwareaopen(1-badIm,695);
+figure()
+imshow(clean695)
+<span class="comment">% saveas(figure(2), 'clean695_part1c.jpg')</span>
+title(<span class="string">"Question 1 - Part(c), image w/ minimum badPixels at P = 695"</span>)
+</pre><pre class="codeoutput">The minimum value of the curve is 48730.
+This minimum occurs at the x value of 695.
+</pre><img vspace="5" hspace="5" src="HW1_02.png" alt=""> <h2 id="6">Problem 2 Erosion and Dilation</h2><h2 id="7"><i>Part(a)</i></h2><pre class="codeinput">labels = [<span class="string">"dilate e3"</span>; <span class="string">"dilate_erode e3"</span>; <span class="string">"dilate e5"</span>;
+    <span class="string">"dilate_erode e5"</span>; <span class="string">'dilate e7'</span>; <span class="string">'dilate_erode e7'</span>];
+badPixels = zeros(6,1);
+
+<span class="comment">% _e3 Dilation and then Erosion_</span>
+SE = ones(3);
+e3 = imdilate(badIm,SE);
+badPixels(1) = sum(sum(xor(idealIm,e3)));
+figure()
+subplot(1,2,1)
+imshow(e3)
+title(<span class="string">'dilate with SE = ones(3)'</span>)
+
+e3 = imerode(e3,SE);
+badPixels(2) = sum(sum(xor(idealIm,e3)));
+subplot(1,2,2),
+imshow(e3)
+title(<span class="string">'erode the dilated with SE = ones(3)'</span>)
+<span class="comment">% saveas(figure(3), 'e3_erode_part2a.jpg')</span>
+</pre><img vspace="5" hspace="5" src="HW1_03.png" alt=""> <pre class="codeinput"><span class="comment">% _e5 Dilation and then Erosion_</span>
+SE = ones(5);
+e5 = imdilate(badIm,SE);
+badPixels(3) = sum(sum(xor(idealIm,e5)));
+figure()
+subplot(1,2,1)
+imshow(e5)
+title(<span class="string">'dilate with SE = ones(5)'</span>)
+
+e5 = imerode(e5,SE);
+badPixels(4) = sum(sum(xor(idealIm,e5)));
+subplot(1,2,2)
+imshow(e5)
+title(<span class="string">'erode the dilated with SE = ones(5)'</span>)
+<span class="comment">% saveas(figure(4), 'e5_erode_part2a.jpg')</span>
+</pre><img vspace="5" hspace="5" src="HW1_04.png" alt=""> <pre class="codeinput"><span class="comment">% _e7 Dilation and then Erosion_</span>
+SE = ones(7);
+e7 = imdilate(badIm,SE);
+badPixels(5) = sum(sum(xor(idealIm,e7)));
+figure()
+subplot(1,2,1)
+imshow(e7)
+title(<span class="string">'dilate with SE = ones(7)'</span>)
+
+e7 = imerode(e7,SE);
+badPixels(6) = sum(sum(xor(idealIm,e7)));
+subplot(1,2,2)
+imshow(e7)
+title(<span class="string">'erode the dilated with SE = ones(7)'</span>)
+<span class="comment">% saveas(figure(5), 'e7_erode_part2a.jpg')</span>
+</pre><img vspace="5" hspace="5" src="HW1_05.png" alt=""> <pre class="codeinput">table(labels,badPixels)
+</pre><pre class="codeoutput">
+ans =
+
+  6&times;2 table
+
+         labels          badPixels
+    _________________    _________
+
+    "dilate e3"            31363  
+    "dilate_erode e3"      33638  
+    "dilate e5"            37399  
+    "dilate_erode e5"       7399  
+    "dilate e7"            52255  
+    "dilate_erode e7"       9505  
+
+</pre><p>As we can see from the table e3 has the most number of bad pixels, this makes sense because the image is very noisy and it will not remove most of the noisy objects with just one iteration of erosion. Then e5 has the least number of bad pixels because at this point the structuring element is just big enough to remove most of the non important pixels, but it also removes some of the pixels in the title and the black border. However, it is still better than e7, because in e7 our letters becomes even smaller and lot of parts gets eroded in the process. So we eroded too much in e7 and e5 was better than e3.</p><h2 id="12"><i>Part(b)</i></h2><pre class="codeinput"><span class="comment">% The marker (F) contains the starting points for reconstruction. (this will be e7 for us)</span>
+<span class="comment">% The mask (G), constrains (conditions) the reconstruction. (this will be e5 for us)</span>
+<span class="comment">% The structuring element ones(3)</span>
+
+se = ones(3);
+marker = 1- e7;
+mask = 1-e5;
+iter = 0;
+badPixels = [0,0];
+<span class="keyword">while</span> 1
+    iter = iter + 1;
+    marker1 = imdilate(marker,se); <span class="comment">%marker dilated by se</span>
+    marker2 = and(marker1, mask); <span class="comment">% masking result</span>
+<span class="comment">%     marker2 = imreconstruct(marker1,mask);</span>
+    badPixels = [badPixels ,sum(sum(xor(idealIm,1-marker2)))];
+    <span class="keyword">if</span> iter == 20
+        temp = 1-marker2;
+    <span class="keyword">end</span>
+    marker = marker2;
+
+    <span class="keyword">if</span> iter == 50
+        <span class="keyword">break</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+badPixels = badPixels(3:end);
+figure()
+plot(badPixels);
+<span class="comment">% saveas(figure(6), 'prob2b.jpg')</span>
+title(<span class="string">'Question 2 - Part(b)'</span>)
+xlabel(<span class="string">'# iterations'</span>)
+ylabel(<span class="string">'# of Bad Pixels'</span>)
+</pre><img vspace="5" hspace="5" src="HW1_06.png" alt=""> <pre class="codeinput">figure()
+imshow(temp)
+title(<span class="string">'image at iteration 20th'</span>)
+</pre><img vspace="5" hspace="5" src="HW1_07.png" alt=""> <p>Here, In the morphological reconstruction we used e7 as are marker since it is a subset of e5 which will be used as a mask. What we are trying to do here is either perform geodesic dilation or geodesic erosion repetively until it converges. Basically no longer changes. Hence, from the plot above we can see that after around 20 iteration, the image is no longer changing (converges). What this means is that even if we will do more dilation it will not change.</p><h2 id="15"><i>Part(c)</i></h2><pre class="codeinput"><span class="comment">% First we will take the approach from question one and remove all the</span>
+<span class="comment">% objects with less than the min P from Q1 part(c), i.e, P = 695</span>
+<span class="comment">% this gives us a little cleaner image to work with</span>
+
+clean695 = 1 - bwareaopen(1-badIm,695);
+
+<span class="comment">% Now we use dialation and erostion from part a of question 2 s.t. we can</span>
+<span class="comment">% get rid of some more noise from clean695 image.</span>
+
+SE = ones(5);
+e5 = imdilate(clean695,SE);
+e5 = imerode(e5,SE);
+
+se = ones(3);
+marker = 1-e5;
+mask = 1-e3;
+iter = 0;
+badPixels = [0,0];
+<span class="keyword">while</span> 1
+    iter = iter + 1;
+    marker1 = imdilate(marker,se); <span class="comment">%marker dilated by se</span>
+    marker2 = and(marker1, mask); <span class="comment">% masking result</span>
+<span class="comment">%     marker2 = imreconstruct(marker1,mask);</span>
+    badPixels = [badPixels ,sum(sum(xor(idealIm,1-marker2)))];
+    <span class="keyword">if</span> iter == 10
+        temp = 1-marker2;
+    <span class="keyword">end</span>
+    marker = marker2;
+
+    <span class="keyword">if</span> iter == 50
+        <span class="keyword">break</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+badPixels = badPixels(3:end);
+figure()
+plot(badPixels)
+<span class="comment">% saveas(figure(6), 'prob2b.jpg')</span>
+title(<span class="string">'Question 2 - Part(c)'</span>)
+xlabel(<span class="string">'# iterations'</span>)
+ylabel(<span class="string">'# of Bad Pixels'</span>)
+</pre><img vspace="5" hspace="5" src="HW1_08.png" alt=""> <pre class="codeinput">figure()
+imshow(temp)
+title(<span class="string">'Image with new combo of approach'</span>)
+</pre><img vspace="5" hspace="5" src="HW1_09.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2022b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% ECE 253, Homework 1 
+% _*|Shivani Bhakta|*_
+
+%% Problem 1 Cleaning by cluster removal
+clc; clear;
+% Load binary images (Data)
+load('badImFile.mat', 'badIm'); 
+load('idealImFile.mat', 'idealIm');
+
+%% _Part(a)_
+ 
+x = 1:2500;
+y = zeros(1,2500);
+
+for P = 1:2500
+    cleanP = 1 - bwareaopen(1-badIm,P); 
+    y(:,P) = sum(sum(xor(idealIm,cleanP))); 
+end
+
+figure()
+plot(x,y)
+title('Question 1 - Part(a)')
+xlabel('# of pixels P (objs w/ < P pixels gets removed)')
+ylabel('# of Bad Pixels')
+
+%%
+%% _Part(b)_
+% The plot above shows that the number of bad pixels decreases at 
+% first as the P increases, this is understandable because all the 
+% objects with fewer than P pixels are getting removed. This means all 
+% the small to medium objects (aka the random noise) in the image is being removed 
+% and image is becoming closer to the ideal image. However, after some P 
+% values between 500-1k, the badpixels numbers starts to increase again. 
+% This is mainly because now the larger portions aka the chapter number/title 
+% and even parts of the large black lines are also being removed, 
+% as the P value increases. It is not monotonic because the image is very
+% noisy and some objects are pixels are not clearly separable, specially
+% the background images in the title of the chapter. 
+
+%% _Part(c)_
+[minP, miny] = min(y);  %695, 48730
+fprintf('The minimum value of the curve is %i.\n', minP);
+fprintf('This minimum occurs at the x value of %i.\n', miny);
+
+clean695 = 1 - bwareaopen(1-badIm,695); 
+figure() 
+imshow(clean695)
+% saveas(figure(2), 'clean695_part1c.jpg')
+title("Question 1 - Part(c), image w/ minimum badPixels at P = 695")
+
+%% Problem 2 Erosion and Dilation
+%% _Part(a)_ 
+
+ 
+labels = ["dilate e3"; "dilate_erode e3"; "dilate e5"; 
+    "dilate_erode e5"; 'dilate e7'; 'dilate_erode e7'];
+badPixels = zeros(6,1); 
+
+% _e3 Dilation and then Erosion_
+SE = ones(3);
+e3 = imdilate(badIm,SE); 
+badPixels(1) = sum(sum(xor(idealIm,e3))); 
+figure()
+subplot(1,2,1) 
+imshow(e3)
+title('dilate with SE = ones(3)')
+
+e3 = imerode(e3,SE); 
+badPixels(2) = sum(sum(xor(idealIm,e3))); 
+subplot(1,2,2), 
+imshow(e3)
+title('erode the dilated with SE = ones(3)')
+% saveas(figure(3), 'e3_erode_part2a.jpg')
+
+%%
+
+% _e5 Dilation and then Erosion_
+SE = ones(5);
+e5 = imdilate(badIm,SE); 
+badPixels(3) = sum(sum(xor(idealIm,e5)));
+figure()
+subplot(1,2,1)
+imshow(e5)
+title('dilate with SE = ones(5)')
+
+e5 = imerode(e5,SE); 
+badPixels(4) = sum(sum(xor(idealIm,e5))); 
+subplot(1,2,2) 
+imshow(e5)
+title('erode the dilated with SE = ones(5)')
+% saveas(figure(4), 'e5_erode_part2a.jpg')
+
+%%
+
+% _e7 Dilation and then Erosion_
+SE = ones(7);
+e7 = imdilate(badIm,SE); 
+badPixels(5) = sum(sum(xor(idealIm,e7)));
+figure()
+subplot(1,2,1)
+imshow(e7)
+title('dilate with SE = ones(7)')
+
+e7 = imerode(e7,SE); 
+badPixels(6) = sum(sum(xor(idealIm,e7))); 
+subplot(1,2,2)
+imshow(e7)
+title('erode the dilated with SE = ones(7)')
+% saveas(figure(5), 'e7_erode_part2a.jpg')
+
+%%
+table(labels,badPixels)
+%%
+% As we can see from the table e3 has the most number of bad pixels, this
+% makes sense because the image is very noisy and it will not remove most
+% of the noisy objects with just one iteration of erosion. Then e5 has the 
+% least number of bad pixels because at this point the structuring element
+% is just big enough to remove most of the non important pixels, but it
+% also removes some of the pixels in the title and the black border.
+% However, it is still better than e7, because in e7 our letters becomes
+% even smaller and lot of parts gets eroded in the process. So we eroded
+% too much in e7 and e5 was better than e3. 
+
+
+%% _Part(b)_
+
+% The marker (F) contains the starting points for reconstruction. (this will be e7 for us)
+% The mask (G), constrains (conditions) the reconstruction. (this will be e5 for us)
+% The structuring element ones(3)
+ 
+se = ones(3); 
+marker = 1- e7; 
+mask = 1-e5; 
+iter = 0;
+badPixels = [0,0];
+while 1
+    iter = iter + 1; 
+    marker1 = imdilate(marker,se); %marker dilated by se
+    marker2 = and(marker1, mask); % masking result
+%     marker2 = imreconstruct(marker1,mask);
+    badPixels = [badPixels ,sum(sum(xor(idealIm,1-marker2)))];
+    if iter == 20
+        temp = 1-marker2;
+    end
+    marker = marker2;
+
+    if iter == 50 
+        break
+    end     
+end
+badPixels = badPixels(3:end);
+figure()
+plot(badPixels);
+% saveas(figure(6), 'prob2b.jpg')
+title('Question 2 - Part(b)')
+xlabel('# iterations')
+ylabel('# of Bad Pixels')
+
+%%
+figure()
+imshow(temp)
+title('image at iteration 20th')
+
+%%
+% Here, In the morphological reconstruction we used e7 as are marker since 
+% it is a subset of e5 which will be used as a mask. What we are trying to 
+% do here is either perform geodesic dilation or geodesic erosion 
+% repetively until it converges. Basically no longer changes. Hence, from 
+% the plot above we can see that after around 20 iteration, the image is no
+% longer changing (converges). What this means is that even if we will do
+% more dilation it will not change. 
+
+%% _Part(c)_
+ 
+% First we will take the approach from question one and remove all the
+% objects with less than the min P from Q1 part(c), i.e, P = 695 
+% this gives us a little cleaner image to work with 
+
+clean695 = 1 - bwareaopen(1-badIm,695); 
+
+% Now we use dialation and erostion from part a of question 2 s.t. we can
+% get rid of some more noise from clean695 image. 
+
+SE = ones(5);
+e5 = imdilate(clean695,SE); 
+e5 = imerode(e5,SE); 
+
+se = ones(3); 
+marker = 1-e5; 
+mask = 1-e3; 
+iter = 0;
+badPixels = [0,0];
+while 1
+    iter = iter + 1; 
+    marker1 = imdilate(marker,se); %marker dilated by se
+    marker2 = and(marker1, mask); % masking result
+%     marker2 = imreconstruct(marker1,mask);
+    badPixels = [badPixels ,sum(sum(xor(idealIm,1-marker2)))];
+    if iter == 10
+        temp = 1-marker2;
+    end
+    marker = marker2;
+
+    if iter == 50 
+        break
+    end     
+end
+badPixels = badPixels(3:end);
+figure()
+plot(badPixels)
+% saveas(figure(6), 'prob2b.jpg')
+title('Question 2 - Part(c)')
+xlabel('# iterations')
+ylabel('# of Bad Pixels')
+
+%%
+figure()
+imshow(temp)
+title('Image with new combo of approach')
+
+
+
+
+
+
+
+
+
+
+
+##### SOURCE END #####
+--></body></html>

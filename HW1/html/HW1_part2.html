@@ -1,0 +1,163 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>ECE 253, Homework 1</title><meta name="generator" content="MATLAB 9.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-10-07"><meta name="DC.source" content="HW1_part2.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>ECE 253, Homework 1</h1><!--introduction--><p><i><b><tt>Shivani Bhakta</tt></b></i></p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Problem 3 Skeletonization</a></li><li><a href="#2"><i>Part(a)</i></a></li><li><a href="#3"><i>Part(b)</i></a></li><li><a href="#4">Problem 4</a></li><li><a href="#5">Problem 5</a></li></ul></div><h2 id="1">Problem 3 Skeletonization</h2><pre class="codeinput">clc; clear;
+<span class="comment">% Load binary images (Data)</span>
+load(<span class="string">'badImFile.mat'</span>, <span class="string">'badIm'</span>);
+load(<span class="string">'idealImFile.mat'</span>, <span class="string">'idealIm'</span>);
+</pre><h2 id="2"><i>Part(a)</i></h2><pre class="codeinput">ideal_skel =  1 - bwmorph(1-idealIm,<span class="string">'skel'</span>,inf);
+figure
+imshow(ideal_skel)
+<span class="comment">% saveas(figure(7), 'prob3a_skele.jpg')</span>
+title(<span class="string">'idealImage Skeletonization'</span>)
+</pre><img vspace="5" hspace="5" src="HW1_part2_01.png" alt=""> <h2 id="3"><i>Part(b)</i></h2><p>To remove the spurs we could first use pruning as discussed in lecture. This involves using of the thinning operator and 8 different structuring elements B1, B2, ..., B8, simultaneously. This will allow the image to get down to single pixel thickness and doing it simultaneously means removing multiple spurs at the same time. A &#8855; B = A &#8211; (A &#8859; B), this step can be repeated until some condition like the shape is met. Pruning will remove the spurs, however, it leaves the skeleton much smaller, so we will need to grow it using dilatation. We can dilate each endpoints Xi using H = ones(3), take the intersection with original image (Xi &#8853; H) &#8745; A</p><h2 id="4">Problem 4</h2><p>ANSWER: b)$[(A \ominus S_1) \cap (A^c \ominus S_2)] \oplus S_1$</p><p>Structuring element S1 exactly matches one of the small square boxes, which is very similar to the white boxes that remain in image B after the transformation. This is a interesting thing to notice because none of the other white boxes that are touching other boxes than they do not show up in image B.</p><p>So, Now let's look at option b, for the first part we erode A using the structuring element S1, this gives us an image with 3x3 white boxes turned into just one 1x1 white pixel, because S1 will overlap/match with all white boxes including the ones with white consecutive neighbours. In simple words, an image with a single dot in place of boxes. Note that the U space will kindof still stay here. Next, the second part of the operation takes the A complement and erodes with S2, here due to the properties of S2 (i.e 3x3 black box with a border of single white pixel or 5x5 white ring), it will always remove the black boxes that doesn't have black border. This is basically when any of the white box in the image A who has neighbours. Thus only the isolated box will stay there. Now intersection betweeen these two images, first one with 1x1 white boxes and second with 3x3 isolated boxes. Hence intersection will give us 1x1 pixel at the center, and now to get the orignal 3x3, will be just need to dilate it with S1. Thus, we dilate the intersection with S1 giving us the image with only isolated white boxes and not the consecutive white boxes aka the U shape in the middle.</p><h2 id="5">Problem 5</h2><p>
+<table border=2>
+<tr><td>1</td> <td>d</td></tr>
+<tr><td>2</td> <td>b</td></tr>
+<tr><td>3</td> <td>g</td></tr>
+<tr><td>4</td> <td>a</td></tr>
+<tr><td>5</td> <td>d</td></tr>
+<tr><td>6</td> <td>i</td></tr>
+<tr><td>7</td> <td>c</td></tr>
+<tr><td>8</td> <td>d</td></tr>
+</table>
+</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2022b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% ECE 253, Homework 1 
+% _*|Shivani Bhakta|*_
+
+%% Problem 3 Skeletonization 
+clc; clear;
+% Load binary images (Data)
+load('badImFile.mat', 'badIm'); 
+load('idealImFile.mat', 'idealIm'); 
+
+%% _Part(a)_
+
+ideal_skel =  1 - bwmorph(1-idealIm,'skel',inf); 
+figure 
+imshow(ideal_skel)
+% saveas(figure(7), 'prob3a_skele.jpg')
+title('idealImage Skeletonization')
+
+
+%% _Part(b)_ 
+% To remove the spurs we could first use pruning as discussed in lecture. This 
+% involves using of the thinning operator and 8 different structuring 
+% elements B1, B2, ..., B8, simultaneously. This will allow the image to 
+% get down to single pixel thickness and doing it simultaneously means 
+% removing multiple spurs at the same time. A ⊗ B = A – (A ⊛ B), this step 
+% can be repeated until some condition like the shape is met. Pruning will 
+% remove the spurs, however, it leaves the skeleton much smaller, so we will 
+% need to grow it using dilatation. We can dilate each endpoints Xi using 
+% H = ones(3), take the intersection with original image (Xi ⊕ H) ∩ A 
+
+
+%% Problem 4 
+% ANSWER: b)$[(A \ominus S_1) \cap (A^c \ominus S_2)] \oplus S_1$
+%
+% Structuring element S1 exactly matches one of the small square boxes, 
+% which is very similar to the white boxes that remain in image B after 
+% the transformation. This is a interesting thing to notice because none 
+% of the other white boxes that are touching other boxes than they do not 
+% show up in image B. 
+% 
+% So, Now let's look at option b, for the first part we erode A using the
+% structuring element S1, this gives us an image with 3x3 white boxes 
+% turned into just one 1x1 white pixel, because S1 will overlap/match with 
+% all white boxes including the ones with white consecutive neighbours. 
+% In simple words, an image with a single dot in place of boxes. Note that
+% the U space will kindof still stay here. Next, the second part of the 
+% operation takes the A complement and erodes with S2, here due to the 
+% properties of S2 (i.e 3x3 black box with a border of single white pixel 
+% or 5x5 white ring), it will always remove the black boxes that doesn't 
+% have black border. This is basically when any of the white box in the 
+% image A who has neighbours. Thus only the isolated box will stay there.   
+% Now intersection betweeen these two images, first one with 1x1 white
+% boxes and second with 3x3 isolated boxes. Hence intersection will give us
+% 1x1 pixel at the center, and now to get the orignal 3x3, will be just
+% need to dilate it with S1. Thus, we dilate the intersection with S1
+% giving us the image with only isolated white boxes and not the
+% consecutive white boxes aka the U shape in the middle. 
+
+%% Problem 5 
+% <html>
+% <table border=2>
+% <tr><td>1</td> <td>d</td></tr>
+% <tr><td>2</td> <td>b</td></tr>
+% <tr><td>3</td> <td>g</td></tr>
+% <tr><td>4</td> <td>a</td></tr>
+% <tr><td>5</td> <td>d</td></tr>
+% <tr><td>6</td> <td>i</td></tr>
+% <tr><td>7</td> <td>c</td></tr>
+% <tr><td>8</td> <td>d</td></tr>
+% </table>
+% </html>
+##### SOURCE END #####
+--></body></html>
