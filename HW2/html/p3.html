@@ -1,0 +1,285 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Problem 3 Unsharp Masking</title><meta name="generator" content="MATLAB 9.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-10-18"><meta name="DC.source" content="p3.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Problem 3 Unsharp Masking</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1"><i>Part(a)</i></a></li><li><a href="#4"><i>Part(b)</i></a></li></ul></div><h2 id="1"><i>Part(a)</i></h2><pre class="codeinput">clc; clear; close <span class="string">all</span>;
+type <span class="string">unsharp.m</span>
+</pre><pre class="codeoutput">
+function im_out = unsharp(im_in, maskA, weight)
+% INPUTS: 
+% im_in : Input Image 
+% maskA : small odd-sized lowpass filter mask (LPF)
+% weight : positive number (k &gt;= 1)
+
+% OUTPUTS: 
+% im_out : Output Image
+    
+[a,b] = size( maskA ); 
+maskB = zeros( size( maskA));
+maskB(ceil(a/2),ceil(b/2)) = 1; % Original Signal (matrix of zeros with center 1) 
+maskC = maskB - maskA; % highFreq (HPF(orig)) = orig - LPF(orig) 
+maskD = maskB + weight * maskC; % output = orig + k * HPF(orig) : : unsharp mask  
+im_out = conv2(im_in,maskD,'valid');  % sharpened signal 
+end 
+
+
+</pre><p><b>EXPLANATION</b></p><div><ul><li>Mask B can be seen as the original signal, which is basically a matrix of zeros with 1 on the center position</li><li>Mask C is the difference of original signal and the input of mask A, which is the lowpass filter mask (LPF), which is basically highpass filter mask (HPF). Because orignal signal is just the summation of HPF and LPF</li><li>Mask D is the unsharp mask, which is the HPF added to the orignal signal with some positive weight multiplied to it.</li><li>This function performs edge sharpening by taking in the orignal image and lowpass filter image and finds the highpass filter mask to be added to the original image. By defination, the edge sharpened image is generated by adding the high frequency mask to the original image. What high frequency mask means the pixel values that changes quickly, and this happens on the edge of objects in an image. Thus, adding a weighted highpass filter mask, just "bolds" the borders or the edges of the image. Hence, this function performs edge sharpening by just adding the high frequency content to the input image.</li></ul></div><h2 id="4"><i>Part(b)</i></h2><pre class="codeinput">tst = ones(128,1)*[64*ones(1,32) (64:4:188) 192*ones(1,32) 64*ones(1,32)];
+<span class="comment">% first 32 col'ns w/ value 64, then 32 col'ns 64 of ramp going from 64 to</span>
+<span class="comment">% 199, then 32 columns of value 192 and finally 32 col'ns of value</span>
+<span class="comment">% imshow(tst)</span>
+</pre><p><b>Edge shapening with 3x3 Mask</b></p><pre class="codeinput"><span class="comment">% weighted mask</span>
+
+
+mask1 = (1/9)  * ones(3,3);
+mask2 = (1/8)  * [0 1 0; 1 4 1; 0 1 0];
+mask3 = (1/10) * [1 1 1; 1 2 1; 1 1 1];
+mask4 = (1/16) * [1 2 1; 2 4 2; 1 2 1];
+<span class="comment">% masks=[mask1,mask2,mask3,mask4];</span>
+figure()
+<span class="keyword">for</span> ii = 1:4
+    outA = unsharp(tst,mask1, ii);
+    subplot(2,2,ii)
+    imshow(outA)
+    str = sprintf(<span class="string">"weight = %d"</span>,ii);
+    title(str)
+<span class="keyword">end</span>
+sgtitle(<span class="string">"With mask1 = (1/9)  * ones(3,3)"</span> )
+</pre><img vspace="5" hspace="5" src="p3_01.png" alt=""> <pre class="codeinput">figure()
+<span class="keyword">for</span> ii = 1:4
+    outA = unsharp(tst,mask2, ii);
+    subplot(2,2,ii)
+    imshow(outA)
+    str = sprintf(<span class="string">"weight = %d"</span>,ii);
+    title(str)
+<span class="keyword">end</span>
+sgtitle(<span class="string">"With mask2 = (1/8)  * [0 1 0; 1 4 1; 0 1 0]"</span> )
+</pre><img vspace="5" hspace="5" src="p3_02.png" alt=""> <pre class="codeinput">figure()
+<span class="keyword">for</span> ii = 1:4
+    outA = unsharp(tst,mask3, ii);
+    subplot(2,2,ii)
+    imshow(outA)
+    str = sprintf(<span class="string">"weight = %d"</span>,ii);
+    title(str)
+<span class="keyword">end</span>
+sgtitle(<span class="string">"With mask3 = (1/10) * [1 1 1; 1 2 1; 1 1 1]"</span> )
+</pre><img vspace="5" hspace="5" src="p3_03.png" alt=""> <pre class="codeinput">figure()
+<span class="keyword">for</span> ii = 1:4
+    outA = unsharp(tst,mask4, ii);
+    subplot(2,2,ii)
+    imshow(outA)
+    str = sprintf(<span class="string">"weight = %d"</span>,ii);
+    title(str)
+<span class="keyword">end</span>
+sgtitle(<span class="string">"With mask4 = (1/16) * [1 2 1; 2 4 2; 1 2 1]"</span> )
+</pre><img vspace="5" hspace="5" src="p3_04.png" alt=""> <pre class="codeinput">mask1 = 1/25 *ones(5,5);
+
+figure()
+<span class="comment">% for ii = 1:4</span>
+outA = unsharp(tst,mask1, ii);
+<span class="comment">% subplot(2,2,ii)</span>
+imshow(outA)
+<span class="comment">% str = sprintf("weight = %d",ii);</span>
+<span class="comment">% title(str)</span>
+<span class="comment">% end</span>
+<span class="comment">% sgtitle("With 1/25 *ones(5,5)" )</span>
+
+
+<span class="comment">% maskC = ones(7,7);</span>
+<span class="comment">%</span>
+<span class="comment">% % unweight</span>
+<span class="comment">%    % unweighted mask</span>
+<span class="comment">% maskA = k(1)*ones(3,3);</span>
+<span class="comment">% maskB = k(1)*ones(5,5);</span>
+<span class="comment">% maskC = ones(7,7);</span>
+</pre><img vspace="5" hspace="5" src="p3_05.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2022b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Problem 3 Unsharp Masking  
+%% _Part(a)_ 
+clc; clear; close all;
+type unsharp.m
+%%
+% *EXPLANATION* 
+%%
+%
+% * Mask B can be seen as the original signal, which is basically a matrix
+% of zeros with 1 on the center position 
+% * Mask C is the difference of original signal and the input of mask A,
+% which is the lowpass filter mask (LPF), which is basically highpass 
+% filter mask (HPF). Because orignal signal is just the summation of HPF
+% and LPF
+% * Mask D is the unsharp mask, which is the HPF added to the orignal
+% signal with some positive weight multiplied to it. 
+% * This function performs edge sharpening by taking in the orignal image
+% and lowpass filter image and finds the highpass filter mask to be added
+% to the original image. By defination, the edge sharpened image is
+% generated by adding the high frequency mask to the original image. What
+% high frequency mask means the pixel values that changes quickly, and this
+% happens on the edge of objects in an image. Thus, adding a weighted 
+% highpass filter mask, just "bolds" the borders or the edges of the image.
+% Hence, this function performs edge sharpening by just adding the high 
+% frequency content to the input image.  
+% 
+
+
+%% _Part(b)_ 
+
+tst = ones(128,1)*[64*ones(1,32) (64:4:188) 192*ones(1,32) 64*ones(1,32)];
+% first 32 col'ns w/ value 64, then 32 col'ns 64 of ramp going from 64 to
+% 199, then 32 columns of value 192 and finally 32 col'ns of value 
+% imshow(tst)
+
+%%
+% *Edge shapening with 3x3 Mask* 
+
+% weighted mask 
+
+
+mask1 = (1/9)  * ones(3,3);
+mask2 = (1/8)  * [0 1 0; 1 4 1; 0 1 0];
+mask3 = (1/10) * [1 1 1; 1 2 1; 1 1 1];
+mask4 = (1/16) * [1 2 1; 2 4 2; 1 2 1]; 
+% masks=[mask1,mask2,mask3,mask4];
+figure()
+for ii = 1:4
+    outA = unsharp(tst,mask1, ii); 
+    subplot(2,2,ii)
+    imshow(outA)
+    str = sprintf("weight = %d",ii);
+    title(str)
+end
+sgtitle("With mask1 = (1/9)  * ones(3,3)" )
+
+%%
+figure()
+for ii = 1:4
+    outA = unsharp(tst,mask2, ii); 
+    subplot(2,2,ii)
+    imshow(outA)
+    str = sprintf("weight = %d",ii);
+    title(str)
+end
+sgtitle("With mask2 = (1/8)  * [0 1 0; 1 4 1; 0 1 0]" )
+
+%%
+figure()
+for ii = 1:4
+    outA = unsharp(tst,mask3, ii); 
+    subplot(2,2,ii)
+    imshow(outA)
+    str = sprintf("weight = %d",ii);
+    title(str)
+end
+sgtitle("With mask3 = (1/10) * [1 1 1; 1 2 1; 1 1 1]" )
+
+
+%%
+figure()
+for ii = 1:4
+    outA = unsharp(tst,mask4, ii); 
+    subplot(2,2,ii)
+    imshow(outA)
+    str = sprintf("weight = %d",ii);
+    title(str)
+end
+sgtitle("With mask4 = (1/16) * [1 2 1; 2 4 2; 1 2 1]" )
+
+
+%%
+mask1 = 1/25 *ones(5,5);
+
+figure()
+% for ii = 1:4
+outA = unsharp(tst,mask1, ii); 
+% subplot(2,2,ii)
+imshow(outA)
+% str = sprintf("weight = %d",ii);
+% title(str)
+% end
+% sgtitle("With 1/25 *ones(5,5)" )
+
+
+% maskC = ones(7,7);
+% 
+% % unweight
+%    % unweighted mask
+% maskA = k(1)*ones(3,3);
+% maskB = k(1)*ones(5,5);
+% maskC = ones(7,7); 
+
+
+
+
+
+
+
+
+
+
+
+##### SOURCE END #####
+--></body></html>

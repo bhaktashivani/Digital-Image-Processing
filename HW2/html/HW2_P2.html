@@ -1,0 +1,254 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>HW2_P2</title><meta name="generator" content="MATLAB 9.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-10-18"><meta name="DC.source" content="HW2_P2.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">Problem 2 Noise Cleaning</a></li><li><a href="#2"><i>Part(a)</i></a></li><li><a href="#4"><i>Part(b)</i></a></li></ul></div><h2 id="1">Problem 2 Noise Cleaning</h2><pre class="codeinput">clc; clear; close <span class="string">all</span>;
+<span class="comment">% img = imread("lungs.jpeg");</span>
+cleanbaby = load(<span class="string">'cleanbaby.mat'</span>).cleanbaby; <span class="comment">% image w/o added noise</span>
+babyS = load(<span class="string">'babyS.mat'</span>).babyS; <span class="comment">% image w/ salt noise added (vertical streaks)</span>
+baby2 = load(<span class="string">'baby2.mat'</span>).baby2; <span class="comment">%image w/ salt + low level gaussian noise</span>
+</pre><h2 id="2"><i>Part(a)</i></h2><pre class="codeinput"><span class="comment">% * 1x3 Filter</span>
+MF_babyS = medfilt2(babyS,[1 3]);
+MF_baby2 = medfilt2(baby2,[1 3]);
+
+<span class="comment">% mean squared error</span>
+mseS = immse(cleanbaby, MF_babyS);
+mse2 = immse(cleanbaby, MF_baby2);
+
+
+fprintf(<span class="string">'Following MSE is calculated on images filtered using the 1x3 median filter. \n \n'</span>);
+fprintf(<span class="string">'The MSE betweeen the filtered babyS and cleanbaby image: %f \n'</span>, mseS);
+fprintf(<span class="string">'The MSE betweeen the filtered baby2 and cleanbaby image: %f \n'</span>, mse2);
+
+<span class="comment">% * 3x3 Filter</span>
+MF_babyS = medfilt2(babyS,[3 3]);
+MF_baby2 = medfilt2(baby2,[3 3]);
+
+<span class="comment">% mean squared error</span>
+mseS = immse(cleanbaby, MF_babyS);
+mse2 = immse(cleanbaby, MF_baby2);
+
+
+fprintf(<span class="string">'\nFollowing MSE is calculated on images filtered using the 3x3 median filter. \n \n'</span>);
+fprintf(<span class="string">'The MSE betweeen the filtered babyS and cleanbaby image: %f \n'</span>, mseS);
+fprintf(<span class="string">'The MSE betweeen the filtered baby2 and cleanbaby image: %f \n'</span>, mse2);
+</pre><pre class="codeoutput">Following MSE is calculated on images filtered using the 1x3 median filter. 
+ 
+The MSE betweeen the filtered babyS and cleanbaby image: 4.486189 
+The MSE betweeen the filtered baby2 and cleanbaby image: 6.736691 
+
+Following MSE is calculated on images filtered using the 3x3 median filter. 
+ 
+The MSE betweeen the filtered babyS and cleanbaby image: 5.514147 
+The MSE betweeen the filtered baby2 and cleanbaby image: 6.471014 
+</pre><div><ul><li>The 1x3 filter does better (in terms of MSE) than 3x3 filter for babyS. The median filter in general is good for removing salt and pepper noise. Salt noise as we know it, is random white pixels (white dots in an image), which in our case is distributed like vertical streaks in babyS. Here what 1x3 median filter does is, it takes the 3 values in the neighborhood (within that row) and sorts them, chooses the median and assigns it to the pixel of interest. This forces pixels with distinct intensities to be more like it's neighbours. This 1x3 works better than 3x3, because, the former sorts all 9 values (includes 3 rows), potentialy having more noise, since our noise is distributed vertically, making it more error prone than just looking at the row, which 1x3 does well.</li><li>The 3x3 filter does better (in terms of MSE) than 1x3 filter for baby2. Notice that baby2 has added low level of Gaussian noise on top of the salt noise we saw in babyS. Thus even though 1x3 does better for babyS, it doesn't do that well for baby2 due to this added Gaussian noise. Here, 3x3 filter helps because of the low level of Gaussian noise, it will look at the entire neighbourhood and choose the median which will remove all the low extream as well as high and actually chooses the value in the sequence, rather than random number like mean filter could give, that might not even be part of the sequence.</li></ul></div><h2 id="4"><i>Part(b)</i></h2><pre class="codeinput">MF_baby2 = medfilt2(baby2,[3 3]);
+Spatial_filter = 1/8 * [0 1 0; 1 4 1; 0 1 0]; <span class="comment">% mse = 6.177217</span>
+<span class="comment">% Spatial_filter = 1/9 * ones(3,3);  % mse = 8.713174</span>
+<span class="comment">% Spatial_filter = 1/10 * [1 1 1; 1 2 1; 1 1 1]; % mse = 8.092480</span>
+<span class="comment">% Spatial_filter = 1/16 * [1 2 1; 2 4 2; 1 2 1]; % mse = 7.311363</span>
+SA_baby2 = imfilter(MF_baby2, Spatial_filter);
+
+<span class="comment">% mean squared error</span>
+mse3 = immse(cleanbaby, SA_baby2);
+
+fprintf([<span class="string">'\nFollowing MSE is calculated on image filtered using the 3x3 median filter \n'</span> <span class="keyword">...</span>
+    <span class="string">'and a spatial averaging 3x3 mean filter. \n \n'</span>]);
+fprintf(<span class="string">'The MSE betweeen the filtered baby2 and cleanbaby image: %f \n'</span>, mse3);
+
+
+MF_baby2 = medfilt2(baby2,[1 3]);
+SA_baby2 = imfilter(MF_baby2, Spatial_filter);
+
+
+<span class="comment">% mean squared error</span>
+mse3 = immse(cleanbaby, SA_baby2);
+
+fprintf([<span class="string">'\nFollowing MSE is calculated on image filtered using the 1x3 median filter \n'</span> <span class="keyword">...</span>
+    <span class="string">'and a spatial averaging 3x3 mean filter. \n \n'</span>]);
+fprintf(<span class="string">'The MSE betweeen the filtered baby2 and cleanbaby image: %f \n'</span>, mse3);
+</pre><pre class="codeoutput">
+Following MSE is calculated on image filtered using the 3x3 median filter 
+and a spatial averaging 3x3 mean filter. 
+ 
+The MSE betweeen the filtered baby2 and cleanbaby image: 6.177217 
+
+Following MSE is calculated on image filtered using the 1x3 median filter 
+and a spatial averaging 3x3 mean filter. 
+ 
+The MSE betweeen the filtered baby2 and cleanbaby image: 5.558170 
+</pre><div><ul><li>Here, the sequential use of a median filter and a spatial averaging filter on the baby2 image that has both noise type works better than either of the median filters in part a. However, it is not a significant difference (just ~0.91 mse) from the lowest in part a.</li><li>We see that using the 1x3 is better than 3x3 median filter in this sequence, it is because of the same reason as mentioned in part a. We have vertical salt noise and hence 1x3 is better. So with first operation in the series, we are decreasing that salt noise. Once we get rid of most of the salt noise, we can say that we are somewhat only left with the Gaussian noise.</li><li>Now, because averaging works better with removing gaussian noise, we have better results than just using 3x3 median filter alone for the gaussian noise. Spatial average filter will replace each pixel with the average of it's all neighbours, this will help with the smoothing of the image.</li></ul></div><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2022b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Problem 2 Noise Cleaning  
+
+clc; clear; close all;
+% img = imread("lungs.jpeg");
+cleanbaby = load('cleanbaby.mat').cleanbaby; % image w/o added noise 
+babyS = load('babyS.mat').babyS; % image w/ salt noise added (vertical streaks)
+baby2 = load('baby2.mat').baby2; %image w/ salt + low level gaussian noise
+
+%% _Part(a)_ 
+
+% * 1x3 Filter
+MF_babyS = medfilt2(babyS,[1 3]);
+MF_baby2 = medfilt2(baby2,[1 3]);
+
+% mean squared error
+mseS = immse(cleanbaby, MF_babyS); 
+mse2 = immse(cleanbaby, MF_baby2);
+
+
+fprintf('Following MSE is calculated on images filtered using the 1x3 median filter. \n \n');
+fprintf('The MSE betweeen the filtered babyS and cleanbaby image: %f \n', mseS);
+fprintf('The MSE betweeen the filtered baby2 and cleanbaby image: %f \n', mse2);
+
+% * 3x3 Filter  
+MF_babyS = medfilt2(babyS,[3 3]);
+MF_baby2 = medfilt2(baby2,[3 3]);
+
+% mean squared error
+mseS = immse(cleanbaby, MF_babyS); 
+mse2 = immse(cleanbaby, MF_baby2);
+
+
+fprintf('\nFollowing MSE is calculated on images filtered using the 3x3 median filter. \n \n');
+fprintf('The MSE betweeen the filtered babyS and cleanbaby image: %f \n', mseS);
+fprintf('The MSE betweeen the filtered baby2 and cleanbaby image: %f \n', mse2);
+
+%%
+% 
+% * The 1x3 filter does better (in terms of MSE) than 3x3 filter for babyS.
+% The median filter in general is good for removing salt and pepper noise. 
+% Salt noise as we know it, is random white pixels (white dots in an image), 
+% which in our case is distributed like vertical streaks in babyS. Here what 
+% 1x3 median filter does is, it takes the 3 values in the neighborhood 
+% (within that row) and sorts them, chooses the median and assigns it to 
+% the pixel of interest. This forces pixels with distinct intensities to be
+% more like it's neighbours. This 1x3 works better than 3x3, because, the 
+% former sorts all 9 values (includes 3 rows), potentialy having more noise,
+% since our noise is distributed vertically, making it more error prone
+% than just looking at the row, which 1x3 does well. 
+% * The 3x3 filter does better (in terms of MSE) than 1x3 filter for baby2.
+% Notice that baby2 has added low level of Gaussian noise on top of the
+% salt noise we saw in babyS. Thus even though 1x3 does better for babyS,
+% it doesn't do that well for baby2 due to this added Gaussian noise. Here, 
+% 3x3 filter helps because of the low level of Gaussian noise, it will look 
+% at the entire neighbourhood and choose the median which will remove all 
+% the low extream as well as high and actually chooses the value in the 
+% sequence, rather than random number like mean filter could give, that
+% might not even be part of the sequence.    
+
+%% _Part(b)_ 
+MF_baby2 = medfilt2(baby2,[3 3]);
+Spatial_filter = 1/8 * [0 1 0; 1 4 1; 0 1 0]; % mse = 6.177217
+% Spatial_filter = 1/9 * ones(3,3);  % mse = 8.713174 
+% Spatial_filter = 1/10 * [1 1 1; 1 2 1; 1 1 1]; % mse = 8.092480
+% Spatial_filter = 1/16 * [1 2 1; 2 4 2; 1 2 1]; % mse = 7.311363
+SA_baby2 = imfilter(MF_baby2, Spatial_filter); 
+
+% mean squared error
+mse3 = immse(cleanbaby, SA_baby2);
+
+fprintf(['\nFollowing MSE is calculated on image filtered using the 3x3 median filter \n' ...
+    'and a spatial averaging 3x3 mean filter. \n \n']);
+fprintf('The MSE betweeen the filtered baby2 and cleanbaby image: %f \n', mse3);
+
+
+MF_baby2 = medfilt2(baby2,[1 3]);
+SA_baby2 = imfilter(MF_baby2, Spatial_filter); 
+
+
+% mean squared error
+mse3 = immse(cleanbaby, SA_baby2);
+
+fprintf(['\nFollowing MSE is calculated on image filtered using the 1x3 median filter \n' ...
+    'and a spatial averaging 3x3 mean filter. \n \n']);
+fprintf('The MSE betweeen the filtered baby2 and cleanbaby image: %f \n', mse3);
+
+%% 
+% 
+% * Here, the sequential use of a median filter and a spatial averaging
+% filter on the baby2 image that has both noise type works better than
+% either of the median filters in part a. However, it is not a significant 
+% difference (just ~0.91 mse) from the lowest in part a.
+% * We see that using the 1x3 is better than 3x3 median filter in this 
+% sequence, it is because of the same reason as mentioned in part a. We
+% have vertical salt noise and hence 1x3 is better. So with first operation
+% in the series, we are decreasing that salt noise. Once we get rid of most
+% of the salt noise, we can say that we are somewhat only left with the
+% Gaussian noise. 
+% * Now, because averaging works better with removing gaussian noise, we 
+% have better results than just using 3x3 median filter alone for 
+% the gaussian noise. Spatial average filter will replace each pixel with
+% the average of it's all neighbours, this will help with the smoothing of
+% the image.
+% 
+
+
+
+##### SOURCE END #####
+--></body></html>

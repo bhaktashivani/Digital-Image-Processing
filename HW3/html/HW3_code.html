@@ -1,0 +1,605 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>ECE 253 Homework 3</title><meta name="generator" content="MATLAB 9.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-10-26"><meta name="DC.source" content="HW3_code.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>ECE 253 Homework 3</h1><!--introduction--><p><i><b>Shivani Bhakta</b></i> A13832428</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Problem 1 Chromaticity Diagrams</a></li><li><a href="#2"><i>Part(a)</i></a></li><li><a href="#4"><i>Part(b)</i></a></li><li><a href="#6"><i>Part(c)</i></a></li><li><a href="#8"><i>Part(d)</i></a></li><li><a href="#10">Problem 2 Chromaticity Diagrams</a></li><li><a href="#11"><i>Part(a)</i></a></li><li><a href="#13"><i>Part(b)</i></a></li><li><a href="#15"><i>Part(c)</i></a></li></ul></div><h2 id="1">Problem 1 Chromaticity Diagrams</h2><h2 id="2"><i>Part(a)</i></h2><pre class="codeinput">clear; close <span class="string">all</span>; clc;
+load <span class="string">cie</span> <span class="string">-ascii</span>
+wavelength = cie(:,1);
+X = cie(:,2);
+Y = cie(:,3);
+Z = cie(:,4);
+
+<span class="comment">% color matching functions</span>
+figure();
+plot(wavelength,X, <span class="string">'r'</span>,<span class="string">'DisplayName'</span>,<span class="string">'X(\lambda)'</span>), hold <span class="string">on</span>;
+plot(wavelength, Y, <span class="string">'g'</span>, <span class="string">'DisplayName'</span>,<span class="string">'Y(\lambda)'</span>), hold <span class="string">on</span>;
+plot(wavelength, Z, <span class="string">'b'</span>, <span class="string">'DisplayName'</span>,<span class="string">'Z(\lambda)'</span>);
+legend(<span class="string">'X(\lambda)'</span>,<span class="string">'Y(\lambda)'</span>, <span class="string">'Z(\lambda)'</span>);
+grid <span class="string">on</span>;
+title(<span class="string">'1a) CIE RGB Color Matching Functions'</span>);
+
+figure(2)
+<span class="comment">% xy chromaticity diagram</span>
+x = X ./ (X+Y+Z);<span class="comment">%element-wise division</span>
+<span class="comment">% x = [x;x(1)];</span>
+y = Y ./ (X+Y+Z);
+plot([x;x(1)],[y;y(1)])
+grid <span class="string">on</span>;
+title(<span class="string">'1a) xy chromoticity diagram'</span>)
+x = [x;x(1)]; <span class="comment">%  line of purple</span>
+y = [y;y(1)];
+</pre><img vspace="5" hspace="5" src="HW3_code_01.png" alt=""> <img vspace="5" hspace="5" src="HW3_code_02.png" alt=""> <p>For the first figure, each of the color matching functions were ploted along the wavelength without any manipulation. For second, following the formula to get the Chromaticity coordinates of mixtures, the element-wise division by the sum of all the Tristimulus values was performed on X and Y tristimulus values and got x and y Note that the "line of purples" was optained using the endpoints of both x and y connecting them for the plot.</p><h2 id="4"><i>Part(b)</i></h2><pre class="codeinput">M = [0.49000 0.32000   0.2;
+     0.17697 0.81240 0.01063;
+        0     0.01   0.99000];
+
+
+<span class="comment">% Tristimulus Values</span>
+Xc = M * [1 0 0]'; <span class="comment">%3x1</span>
+Yc = M * [0 1 0]';
+Zc = M * [0 0 1]';
+
+xX = Xc(1) / sum(Xc);
+yX = Xc(2) / sum(Xc);
+
+xY = Yc(1) / sum(Yc);
+yY = Yc(2) / sum(Yc);
+
+xZ = Zc(1) / sum(Zc);
+yZ = Zc(2) / sum(Zc);
+
+
+plot(x,y,[xX xY xZ xX], [yX yY yZ yX])
+grid <span class="string">on</span>;
+legend(<span class="string">'xy chromoticity diagram'</span>, <span class="string">'Color gamut for CIE RGB spectral primary system'</span>);
+c1 = [xX xY xZ xZ];
+c2 = [yX yY yZ yZ];
+</pre><img vspace="5" hspace="5" src="HW3_code_03.png" alt=""> <p>We are given the conversion from the CIE RGB space to CIE XYZ space. So considering the primaries of RGB as e1, e2, and e3 (i,e. [1 0 0], [0 1 0] , .. respectively), we will perform the linear transformation given to transform the coordinates in one system to the other system and get the XYZ colors. These XYZ Tristimulus Values then gets converted into xy chromaticity coordinates and plot onto the xy chromoticity diagram from part a as a triangle representing the color gamut of the CIE RGB spectral primary system.</p><h2 id="6"><i>Part(c)</i></h2><pre class="codeinput">M = [ 1.910 -0.533 -0.288;
+     -0.985  2.000 -0.028;
+      0.058 -0.118  0.896];
+
+<span class="comment">% Tristimulus  Values</span>
+RN = inv(M) * [1 0 0]'; <span class="comment">%3x1</span>
+GN = inv(M) * [0 1 0]';
+BN = inv(M) * [0 0 1]';
+
+xR = RN(1) / sum(RN);
+yR = RN(2) / sum(RN);
+
+xG = GN(1) / sum(GN);
+yG = GN(2) / sum(GN);
+
+xB = BN(1) / sum(BN);
+yB = BN(2) / sum(BN);
+
+plot(x,y,c1, c2, [xR xG xB xR], [yR yG yB yR])
+grid <span class="string">on</span>;
+legend(<span class="string">'xy chromoticity diagram'</span>, <span class="string">'Color gamut for CIE RGB spectral primary system'</span>,<span class="string">'NTSC primary gamut'</span>); <span class="comment">%, 'SMPTE primary gamut'</span>
+c3 = [xR xG xB xR];
+c4 = [yR yG yB yR];
+
+
+
+M = [ 3.508 -1.741 -0.544;
+     -1.069  1.977  0.035;
+      0.056 -0.197  1.051];
+
+<span class="comment">% Tristimulus  Values</span>
+RS = inv(M) * [1 0 0]'; <span class="comment">%3x1</span>
+GS = inv(M) * [0 1 0]';
+BS = inv(M) * [0 0 1]';
+
+xR = RS(1) / sum(RS);
+yR = RS(2) / sum(RS);
+
+xG = GS(1) / sum(GS);
+yG = GS(2) / sum(GS);
+
+xB = BS(1) / sum(BS);
+yB = BS(2) / sum(BS);
+
+plot(x,y,c1, c2, c3, c4, [xR xG xB xR], [yR yG yB yR])
+grid <span class="string">on</span>;
+legend(<span class="string">'xy chromoticity diagram'</span>, <span class="string">'Color gamut for CIE RGB spectral primary system'</span>,<span class="string">'NTSC primary gamut'</span>, <span class="string">'SMPTE primary gamut'</span>);
+</pre><img vspace="5" hspace="5" src="HW3_code_04.png" alt=""> <p>we are given the conversions from CIE XYZ space to RGB (in NTSC receiver primary system). However, we know the primary of RGB an we need to convert that to XYZ in order to be able to plot the triangle in the xy chromaticity diagram. Therefore, we will need to take the inverse of the transformation matrix and same primary as previous part, we can get the XYZ tristimulus values, which can be used to get the xy chromaticity coordinates to plot on the diagram. Therefore the process is the same as previous part after taking the inverse of the matrix. We do the same thing to get the SMPTE phosphors.</p><p>The NTSC seems to provide the larger gamut. However, note that this space is not perceptually uniform, so we cannot forsure predict which is larger but from just the looks of it NTSC seems bigger.</p><h2 id="8"><i>Part(d)</i></h2><pre class="codeinput">indx = find(cie(:,1) == 700);
+Xc = cie(indx,2:4); <span class="comment">%1x3 \</span>
+indx = find(cie(:,1) == 546);
+Yc = cie(indx,2:4);
+indx = find(cie(:,1) == 436);
+Zc = cie(indx,2:4);
+
+<span class="comment">% Tristimulus Values</span>
+
+xX = Xc(1) / sum(Xc);
+yX = Xc(2) / sum(Xc);
+
+xY = Yc(1) / sum(Yc);
+yY = Yc(2) / sum(Yc);
+
+xZ = Zc(1) / sum(Zc);
+yZ = Zc(2) / sum(Zc);
+
+plot(x,y,[xX xY xZ xX], [yX yY yZ yX])
+grid <span class="string">on</span>;
+</pre><img vspace="5" hspace="5" src="HW3_code_05.png" alt=""> <p>To get CIE RGB spectral primary system where the monochromatic spectral primaries (Red = 700nm, Green = 546.1nm ~= 546nm, Blue = 435.8nm ~= 436nm) were used for the original color matching experiment. we are already given these in CIE, thus we only get the RGB values that meet the above wavelength requirement. This gives us 3 vectors with each length of 3 points. Once we have these, we get their Tristimulus Values through the standard formulas and plot the triangle for connect the points on the xy chromaticity diagram. As expected, the triangle is exactly same as part b) where we did the linear transformation to go betweeen the CIE XYZ and CIE RGB color systems. Since we were already given the points here, it checks out work.</p><h2 id="10">Problem 2 Chromaticity Diagrams</h2><pre class="codeinput">clc; close <span class="string">all</span>; clear;
+img = imread(<span class="string">"PeopleWalking.jpeg"</span>);
+
+r = img(:,:,1);
+g = img(:,:,2);
+b = img(:,:,3);
+figure, imshow(img);
+title(<span class="string">'Original PeopleWalking'</span>);
+</pre><img vspace="5" hspace="5" src="HW3_code_06.png" alt=""> <h2 id="11"><i>Part(a)</i></h2><p>Check inputs in the range of 0 to 255</p><pre class="codeinput">assert(all(all(r &gt;= 0 | r &lt;= 225)) == 1);
+assert(all(all(g &gt;= 0 | g &lt;= 225)) == 1);
+assert(all(all(b &gt;= 0 | b &lt;= 225)) == 1);
+
+[h,s,i] = rgb2hsi(r,g,b);
+ihe = histeq(i);
+
+[rHE, gHE, bHE] = hsi2rgb(h,s,ihe);
+rHE(rHE&lt;0) = 0; rHE(rHE&gt;225) = 225;
+gHE(gHE&lt;0) = 0; gHE(gHE&gt;225) = 225;
+bHE(bHE&lt;0) = 0; bHE(bHE&gt;225) = 225;
+rHE = uint8(rHE);
+gHE = uint8(gHE);
+bHE = uint8(bHE);
+imHE = reshape([rHE gHE bHE], 500, 1110, 3);
+figure;
+imshow(imHE)
+title(<span class="string">'intensity plane "i" equalized Image'</span>)
+</pre><img vspace="5" hspace="5" src="HW3_code_07.png" alt=""> <p>As it can be seen in the qualized image, there is a hue change on the dark parts of the image such as the bagpack of the person, it becomes darker. The light colors like the hairs, shirts and even the field in the background that might be very light brown in the original image, turns into a more whiter patch. Similarly, the lighter green grass areas on the left starts to show more of a brighter white color and the grass on the right becomes more darker, which was dark green originally. More generally, the intensity in the image is spreading. Lighter things becomes more light (closer to white) and darker things becomes (closer to black). This is probably because the histogram equalization spreads out the common intensity values. We can also say this as increasing the contrast in the image.</p><h2 id="13"><i>Part(b)</i></h2><pre class="codeinput"><span class="comment">% enhance saturation</span>
+newS = sqrt(s);
+<span class="comment">% ihe = histeq(i);</span>
+
+[rHE, gHE, bHE] = hsi2rgb(h,newS,i);
+<span class="comment">% [rHE, gHE, bHE] = hsi2rgb(h,newS,ihe);</span>
+rHE(rHE&lt;0) = 0; rHE(rHE&gt;225) = 225;
+gHE(gHE&lt;0) = 0; gHE(gHE&gt;225) = 225;
+bHE(bHE&lt;0) = 0; bHE(bHE&gt;225) = 225;
+rHE = uint8(rHE);
+gHE = uint8(gHE);
+bHE = uint8(bHE);
+imHE = reshape([rHE gHE bHE], 500, 1110, 3);
+figure;
+imshow(imHE)
+title(<span class="string">'Image with enhanced satuaration'</span>)
+</pre><img vspace="5" hspace="5" src="HW3_code_08.png" alt=""> <p>By taking the square of the satuaration values, we are increasing the overall saturation of the image. This basically means the image has become more colorful or richer in it's colors. The green grass areas have become more green in color. This did some good to the image, however, the similar effect on the other parts wear not a change for good. For example, the person's white hair turned red, their skin also changed to show more red. Thus, any parts that were close to white in the original image has started to look a lot more of red, we can also see this in the people's shirt, not just in their skin and hair. The background field/farm region also have become more brown where it was originally lighter brown areas. The reason for the white region to appear red after the saturation could be that when satuation is person, we enhance the color that are of dominating in originial gets enhanced after.</p><h2 id="15"><i>Part(c)</i></h2><pre class="codeinput">clc; close <span class="string">all</span>; clear;
+img = imread(<span class="string">"PeopleWalking.jpeg"</span>);
+
+r = img(:,:,1);
+g = img(:,:,2);
+b = img(:,:,3);
+figure; imshow(img);
+title(<span class="string">'Original PeopleWalking'</span>);
+
+
+
+[h,s,i] = rgb2hsi(r,g,b);
+<span class="comment">% enhance saturation for only some parts</span>
+newS = s;
+<span class="keyword">for</span> ii = 1:size(s,1)
+    <span class="keyword">for</span> jj = 1:size(s,2)
+        <span class="keyword">if</span> s(ii,jj) &lt;= 0.289
+            newS(ii,jj) = s(ii,jj);
+        <span class="keyword">else</span>
+            <span class="comment">% making sure the number do not excide 1</span>
+<span class="comment">%             if sqrt(s(ii,jj)) &gt; 1 % s(ii,jj) * 2 &gt; 1</span>
+<span class="comment">%                 newS(ii,jj) = 1;</span>
+<span class="comment">%             else</span>
+                newS(ii,jj) = sqrt(s(ii,jj)); <span class="comment">%s(ii,jj) * 2.2;</span>
+<span class="comment">%             end</span>
+        <span class="keyword">end</span>
+
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+
+[rHE, gHE, bHE] = hsi2rgb(h,newS,i);
+<span class="comment">% [rHE, gHE, bHE] = hsi2rgb(h,newS,ihe);</span>
+rHE(rHE&lt;0) = 0; rHE(rHE&gt;225) = 225;
+gHE(gHE&lt;0) = 0; gHE(gHE&gt;225) = 225;
+bHE(bHE&lt;0) = 0; bHE(bHE&gt;225) = 225;
+rHE = uint8(rHE);
+gHE = uint8(gHE);
+bHE = uint8(bHE);
+imHE = reshape([rHE gHE bHE], 500, 1110, 3);
+figure;
+imshow(imHE)
+title(<span class="string">'More visually appealing Image'</span>)
+</pre><img vspace="5" hspace="5" src="HW3_code_09.png" alt=""> <img vspace="5" hspace="5" src="HW3_code_10.png" alt=""> <p>For previous part, we noticed that we didn't want the red hue that we were getting for the lighter parts like white hair, shirts, skin etc. So to help with that we will try to test out by not changing the satuation values until certain number. So Basically keep saturation as it for some range and enhance it for the rest till 1. Here I specifically didn't change all the sections with saturation less than 0.289 and kept it as is and for rest, we take the square root like previous section. This removed the redness accross the white parts, while enhacing rest of the image by making it look more colorful.</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2022b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% ECE 253 Homework 3 
+% _*Shivani Bhakta*_
+% A13832428
+
+%% Problem 1 Chromaticity Diagrams 
+%% _Part(a)_
+clear; close all; clc; 
+load cie -ascii
+wavelength = cie(:,1);
+X = cie(:,2);
+Y = cie(:,3); 
+Z = cie(:,4); 
+
+% color matching functions 
+figure();
+plot(wavelength,X, 'r','DisplayName','X(\lambda)'), hold on;
+plot(wavelength, Y, 'g', 'DisplayName','Y(\lambda)'), hold on;
+plot(wavelength, Z, 'b', 'DisplayName','Z(\lambda)');
+legend('X(\lambda)','Y(\lambda)', 'Z(\lambda)');
+grid on; 
+title('1a) CIE RGB Color Matching Functions');
+
+figure(2)
+% xy chromaticity diagram  
+x = X ./ (X+Y+Z);%element-wise division  
+% x = [x;x(1)];  
+y = Y ./ (X+Y+Z); 
+plot([x;x(1)],[y;y(1)])
+grid on; 
+title('1a) xy chromoticity diagram')
+x = [x;x(1)]; %  line of purple 
+y = [y;y(1)]; 
+
+%%
+%
+% For the first figure, each of the color matching functions were ploted
+% along the wavelength without any manipulation. 
+% For second, following the formula to get the Chromaticity coordinates of 
+% mixtures, the element-wise division by the sum of all the Tristimulus 
+% values was performed on X and Y tristimulus values and got x and y
+% Note that the "line of purples" was optained using the endpoints of both 
+% x and y connecting them for the plot.
+
+%% _Part(b)_
+
+M = [0.49000 0.32000   0.2; 
+     0.17697 0.81240 0.01063; 
+        0     0.01   0.99000];
+
+
+% Tristimulus Values
+Xc = M * [1 0 0]'; %3x1
+Yc = M * [0 1 0]'; 
+Zc = M * [0 0 1]'; 
+
+xX = Xc(1) / sum(Xc);
+yX = Xc(2) / sum(Xc);
+
+xY = Yc(1) / sum(Yc);
+yY = Yc(2) / sum(Yc);
+
+xZ = Zc(1) / sum(Zc);
+yZ = Zc(2) / sum(Zc);
+
+
+plot(x,y,[xX xY xZ xX], [yX yY yZ yX])
+grid on; 
+legend('xy chromoticity diagram', 'Color gamut for CIE RGB spectral primary system');
+c1 = [xX xY xZ xZ];
+c2 = [yX yY yZ yZ]; 
+
+%%
+%
+% We are given the conversion from the CIE RGB space to CIE XYZ space. So 
+% considering the primaries of RGB as e1, e2, and e3 (i,e. [1 0 0], [0 1 0]
+% , .. respectively), we will perform the linear transformation given to 
+% transform the coordinates in one system to the other system and get the 
+% XYZ colors. These XYZ Tristimulus Values then gets converted into xy
+% chromaticity coordinates and plot onto the xy chromoticity diagram
+% from part a as a triangle representing the color gamut of the CIE RGB 
+% spectral primary system. 
+  
+%% _Part(c)_
+
+
+M = [ 1.910 -0.533 -0.288; 
+     -0.985  2.000 -0.028; 
+      0.058 -0.118  0.896];
+
+% Tristimulus  Values
+RN = inv(M) * [1 0 0]'; %3x1
+GN = inv(M) * [0 1 0]'; 
+BN = inv(M) * [0 0 1]'; 
+
+xR = RN(1) / sum(RN);
+yR = RN(2) / sum(RN);
+
+xG = GN(1) / sum(GN);
+yG = GN(2) / sum(GN);
+
+xB = BN(1) / sum(BN);
+yB = BN(2) / sum(BN);
+
+plot(x,y,c1, c2, [xR xG xB xR], [yR yG yB yR])
+grid on; 
+legend('xy chromoticity diagram', 'Color gamut for CIE RGB spectral primary system','NTSC primary gamut'); %, 'SMPTE primary gamut'
+c3 = [xR xG xB xR];
+c4 = [yR yG yB yR];  
+
+
+
+M = [ 3.508 -1.741 -0.544; 
+     -1.069  1.977  0.035; 
+      0.056 -0.197  1.051];
+
+% Tristimulus  Values
+RS = inv(M) * [1 0 0]'; %3x1
+GS = inv(M) * [0 1 0]'; 
+BS = inv(M) * [0 0 1]'; 
+
+xR = RS(1) / sum(RS);
+yR = RS(2) / sum(RS);
+
+xG = GS(1) / sum(GS);
+yG = GS(2) / sum(GS);
+
+xB = BS(1) / sum(BS);
+yB = BS(2) / sum(BS);
+
+plot(x,y,c1, c2, c3, c4, [xR xG xB xR], [yR yG yB yR])
+grid on; 
+legend('xy chromoticity diagram', 'Color gamut for CIE RGB spectral primary system','NTSC primary gamut', 'SMPTE primary gamut');
+
+%%
+%
+% we are given the conversions from CIE XYZ space to RGB (in NTSC receiver 
+% primary system). However, we know the primary of RGB an we need to 
+% convert that to XYZ in order to be able to plot the triangle in the xy 
+% chromaticity diagram. Therefore, we will need to take the inverse of the
+% transformation matrix and same primary as previous part, we can get the
+% XYZ tristimulus values, which can be used to get the xy chromaticity
+% coordinates to plot on the diagram. Therefore the process is the same as
+% previous part after taking the inverse of the matrix. We do the same 
+% thing to get the SMPTE phosphors. 
+% 
+% The NTSC seems to provide the larger gamut. However, note that this space 
+% is not perceptually uniform, so we cannot forsure predict which is larger
+% but from just the looks of it NTSC seems bigger.
+
+%% _Part(d)_ 
+
+indx = find(cie(:,1) == 700); 
+Xc = cie(indx,2:4); %1x3 \
+indx = find(cie(:,1) == 546);
+Yc = cie(indx,2:4);
+indx = find(cie(:,1) == 436);
+Zc = cie(indx,2:4);
+
+% Tristimulus Values
+
+xX = Xc(1) / sum(Xc);
+yX = Xc(2) / sum(Xc);
+
+xY = Yc(1) / sum(Yc);
+yY = Yc(2) / sum(Yc);
+
+xZ = Zc(1) / sum(Zc);
+yZ = Zc(2) / sum(Zc);
+
+plot(x,y,[xX xY xZ xX], [yX yY yZ yX])
+grid on; 
+
+
+%%
+% To get CIE RGB spectral primary system where the monochromatic spectral 
+% primaries (Red = 700nm, Green = 546.1nm ~= 546nm, Blue = 435.8nm ~=
+% 436nm) were used for the original color matching experiment. we are
+% already given these in CIE, thus we only get the RGB values that meet 
+% the above wavelength requirement. This gives us 3 vectors with each 
+% length of 3 points. Once we have these, we get their Tristimulus Values 
+% through the standard formulas and plot the triangle for connect the 
+% points on the xy chromaticity diagram. 
+% As expected, the triangle is exactly same as part b) where we did the
+% linear transformation to go betweeen the CIE XYZ and CIE RGB color
+% systems. Since we were already given the points here, it checks out work.
+
+%% Problem 2 Chromaticity Diagrams 
+
+clc; close all; clear; 
+img = imread("PeopleWalking.jpeg");
+
+r = img(:,:,1);
+g = img(:,:,2);
+b = img(:,:,3);
+figure, imshow(img);
+title('Original PeopleWalking');
+
+%% _Part(a)_ 
+% Check inputs in the range of 0 to 255
+assert(all(all(r >= 0 | r <= 225)) == 1);
+assert(all(all(g >= 0 | g <= 225)) == 1);
+assert(all(all(b >= 0 | b <= 225)) == 1);
+
+[h,s,i] = rgb2hsi(r,g,b);
+ihe = histeq(i); 
+
+[rHE, gHE, bHE] = hsi2rgb(h,s,ihe); 
+rHE(rHE<0) = 0; rHE(rHE>225) = 225; 
+gHE(gHE<0) = 0; gHE(gHE>225) = 225; 
+bHE(bHE<0) = 0; bHE(bHE>225) = 225; 
+rHE = uint8(rHE); 
+gHE = uint8(gHE);
+bHE = uint8(bHE);
+imHE = reshape([rHE gHE bHE], 500, 1110, 3);
+figure; 
+imshow(imHE)
+title('intensity plane "i" equalized Image')
+
+%% 
+% As it can be seen in the qualized image, there is a hue change on the 
+% dark parts of the image such as the bagpack of the person, it becomes 
+% darker. The light colors like the hairs, shirts and even the field in the
+% background that might be very light brown in the original image, turns 
+% into a more whiter patch. Similarly, the lighter green grass areas on the
+% left starts to show more of a brighter white color and the grass on the
+% right becomes more darker, which was dark green originally. More 
+% generally, the intensity in the image is spreading. Lighter things
+% becomes more light (closer to white) and darker things becomes (closer 
+% to black). This is probably because the histogram equalization spreads 
+% out the common intensity values. We can also say this as increasing the 
+% contrast in the image.   
+%
+
+%% _Part(b)_
+
+% enhance saturation 
+newS = sqrt(s);  
+% ihe = histeq(i); 
+
+[rHE, gHE, bHE] = hsi2rgb(h,newS,i); 
+% [rHE, gHE, bHE] = hsi2rgb(h,newS,ihe);
+rHE(rHE<0) = 0; rHE(rHE>225) = 225; 
+gHE(gHE<0) = 0; gHE(gHE>225) = 225; 
+bHE(bHE<0) = 0; bHE(bHE>225) = 225; 
+rHE = uint8(rHE); 
+gHE = uint8(gHE);
+bHE = uint8(bHE);
+imHE = reshape([rHE gHE bHE], 500, 1110, 3);
+figure;
+imshow(imHE)
+title('Image with enhanced satuaration')
+
+%% 
+% By taking the square of the satuaration values, we are increasing the 
+% overall saturation of the image. This basically means the image has
+% become more colorful or richer in it's colors. The green grass areas have
+% become more green in color. This did some good to the image, however, the
+% similar effect on the other parts wear not a change for good. For
+% example, the person's white hair turned red, their skin also changed to
+% show more red. Thus, any parts that were close to white in the original
+% image has started to look a lot more of red, we can also see this in the
+% people's shirt, not just in their skin and hair. The background
+% field/farm region also have become more brown where it was originally
+% lighter brown areas. The reason for the white region to appear red after 
+% the saturation could be that when satuation is person, we enhance the
+% color that are of dominating in originial gets enhanced after.  
+%
+%% _Part(c)_
+clc; close all; clear; 
+img = imread("PeopleWalking.jpeg");
+
+r = img(:,:,1);
+g = img(:,:,2);
+b = img(:,:,3);
+figure; imshow(img);
+title('Original PeopleWalking');
+
+
+
+[h,s,i] = rgb2hsi(r,g,b);
+% enhance saturation for only some parts
+newS = s;  
+for ii = 1:size(s,1)
+    for jj = 1:size(s,2)
+        if s(ii,jj) <= 0.289
+            newS(ii,jj) = s(ii,jj);
+        else 
+            % making sure the number do not excide 1 
+%             if sqrt(s(ii,jj)) > 1 % s(ii,jj) * 2 > 1
+%                 newS(ii,jj) = 1;
+%             else
+                newS(ii,jj) = sqrt(s(ii,jj)); %s(ii,jj) * 2.2;
+%             end
+        end
+
+    end
+end
+
+
+[rHE, gHE, bHE] = hsi2rgb(h,newS,i); 
+% [rHE, gHE, bHE] = hsi2rgb(h,newS,ihe);
+rHE(rHE<0) = 0; rHE(rHE>225) = 225; 
+gHE(gHE<0) = 0; gHE(gHE>225) = 225; 
+bHE(bHE<0) = 0; bHE(bHE>225) = 225; 
+rHE = uint8(rHE); 
+gHE = uint8(gHE);
+bHE = uint8(bHE);
+imHE = reshape([rHE gHE bHE], 500, 1110, 3);
+figure; 
+imshow(imHE)
+title('More visually appealing Image')
+
+%%
+% For previous part, we noticed that we didn't want the red hue that we
+% were getting for the lighter parts like white hair, shirts, skin etc. So
+% to help with that we will try to test out by not changing the satuation
+% values until certain number. So Basically keep saturation as it for some
+% range and enhance it for the rest till 1. 
+% Here I specifically didn't change all the sections with saturation less
+% than 0.289 and kept it as is and for rest, we take the square root like
+% previous section. This removed the redness accross the white parts, while
+% enhacing rest of the image by making it look more colorful. 
+%
+
+
+
+
+
+
+##### SOURCE END #####
+--></body></html>
