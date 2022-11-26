@@ -1,0 +1,304 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>HW5_q3</title><meta name="generator" content="MATLAB 9.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-11-24"><meta name="DC.source" content="HW5_q3.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">ECE 253 Homework 5</a></li><li><a href="#7"><i>Part(ab)</i></a></li><li><a href="#8"><i>_Part(c)</i>_</a></li></ul></div><h2 id="1">ECE 253 Homework 5</h2><p><i><b>Shivani Bhakta</b></i> A13832428 Problem 3 Comparing quantization for images</p><pre class="codeinput">clear, clc, close <span class="string">all</span>;
+testpattern512 = imread(<span class="string">'testpattern512.tif'</span>);
+vase = imread(<span class="string">'vase.tif'</span>);
+astronaut = imread(<span class="string">'astronaut.tif'</span>);
+<span class="comment">% input_img = testpattern512;</span>
+<span class="comment">% input_img = vase;</span>
+<span class="comment">% input_img = astronaut;</span>
+<span class="comment">% vase = imread(Tiff('vase.tif', 'r'));</span>
+
+hw3_b(double(testpattern512), <span class="string">'testpattern512'</span>)
+<span class="comment">%</span>
+</pre><img vspace="5" hspace="5" src="HW5_q3_01.png" alt=""> <img vspace="5" hspace="5" src="HW5_q3_02.png" alt=""> <img vspace="5" hspace="5" src="HW5_q3_03.png" alt=""> <pre class="codeinput">figure, histogram(testpattern512), title(<span class="string">'testpattern512'</span>)
+<span class="comment">%</span>
+</pre><img vspace="5" hspace="5" src="HW5_q3_04.png" alt=""> <pre class="codeinput">hw3_b(double(vase), <span class="string">'vase'</span>)
+<span class="comment">%</span>
+</pre><img vspace="5" hspace="5" src="HW5_q3_05.png" alt=""> <img vspace="5" hspace="5" src="HW5_q3_06.png" alt=""> <img vspace="5" hspace="5" src="HW5_q3_07.png" alt=""> <pre class="codeinput">figure, histogram(vase), title(<span class="string">'vase'</span>)
+<span class="comment">%</span>
+</pre><img vspace="5" hspace="5" src="HW5_q3_08.png" alt=""> <pre class="codeinput">hw3_b(double(astronaut), <span class="string">'astronaut'</span>)
+<span class="comment">%</span>
+</pre><pre class="codeinput">figure, histogram(astronaut), title(<span class="string">'astronaut'</span>)
+</pre><h2 id="7"><i>Part(ab)</i></h2><p>- As it can be seen in all the images above, Lloyd Max quantization does better than uniform quantization in general. This is expected, because llyod considers the probability distribution of each pixel points and quantize the points based on that distrubution. Basically, if we see the histograms of these images, there are some parts which are densely populated, so for these parts llyod assigns more quantization levels, and for the less dense areas we don't see steps that closer to each other. This makes a use difference and help with the MSE as it can be seen from the MSE plots. This is actually very avidant in testpattern and astronut pictures and mse plots. - Looking at the historgram of vase and it's MSE, we can see that the hist is more uniformly distributed compared to testpattern, and therefore, uniform or llyod are not much different. While the mse plots of other two has some kind of spike where we have the uneven distribution in the histogram. And since uniform doesn't take these densly populated area into consideration, it had the highest mse difference compare to llyod in those regions.</p><p>Looking at techinical terms, we satisdfy noth nearest neighbor and centroid conditions in llyod, while only the centroid in uniform quantization.</p><h2 id="8"><i>_Part(c)</i>_</h2><p>- We see that for the testpattern image, from bit-2 to bit-3 the mse increases for the uniform quantizer. This is probably because of the for bit-2 the quantization levels were probably closer to the dense areas/spike areas, while futher in the other one, leading to increased mse for the latter.</p><p>- Although we don't see Lloyd quantizer getting worse for increasing bit rate, it might happen where there is an increase in mse. Let us say, the tie breaking rule for the boundary points, was decided such that it didn't work in the favor of those 'dense/spike' areas. We might still converge but it might not be the best. Also, some initial assumptions could turn up these results.</p><pre class="codeinput"><span class="keyword">function</span> [] = hw3_b(input_img, name)
+
+    mse=[];
+    <span class="keyword">for</span> s = 1:7
+        output_img = Uniform_Quantizer2(uint8(input_img), s);
+        mse(end+1) = immse(output_img, uint8(input_img));
+    <span class="keyword">end</span>
+
+    x=1:1:7;
+    figure,
+    plot(x,mse)
+    hold <span class="string">on</span>;
+
+    mse_lloyd=[];
+    <span class="keyword">for</span> s = 1:7
+
+        [N,M] = size(input_img);
+        training_set = reshape(input_img,N*M,1);
+
+        [partition, codebook] = lloyds(training_set, pow2(s));
+        lloyd_output = zeros(N,M);
+
+        <span class="keyword">for</span> ii = 1:N
+            <span class="keyword">for</span> jj = 1:M
+                value = input_img(ii,jj);
+                idx = 1;
+                <span class="keyword">while</span> idx &lt;= length(partition) &amp;&amp; value&gt;partition(idx)
+                    <span class="comment">% when it is outside the bounds</span>
+                    idx = idx + 1;
+                <span class="keyword">end</span>
+                lloyd_output(ii,jj) = codebook(idx);
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+        lloyd_output = uint8(lloyd_output);
+        mse_lloyd(end+1)= immse(lloyd_output, uint8(input_img));
+    <span class="keyword">end</span>
+
+    plot(x,mse_lloyd)
+    legend(<span class="string">"Uniform"</span>,<span class="string">"Lloyd"</span>),
+    str = sprintf(<span class="string">'MSE Values for the image: %s'</span>, name);
+    title(str);
+
+    figure,
+    str = sprintf(<span class="string">'Uniform image of: %s '</span>, name);
+    imshow(output_img, [0,256]), title(str);
+
+    figure,
+    str = sprintf(<span class="string">'lloyd image of:  %s'</span>, name);
+    imshow(lloyd_output, [0,256]), title(str);
+
+
+<span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">function</span> [output_img] = Uniform_Quantizer2(input_img, s)
+
+input_img = uint8(input_img);
+<span class="comment">% Write a function that takes as inputs an 8-bit image and a scalar</span>
+<span class="comment">% s &#8712; [1,7] and performs uniform quantization so that the output is</span>
+<span class="comment">% quantized to a s-bit image.</span>
+
+output_img = idivide(input_img, pow2(8-s)).*pow2(8-s); <span class="comment">%round off</span>
+output_img = output_img + pow2(8-s-1);
+
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2022b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% ECE 253 Homework 5 
+% _*Shivani Bhakta*_
+% A13832428
+% Problem 3 Comparing quantization for images
+clear, clc, close all; 
+testpattern512 = imread('testpattern512.tif');
+vase = imread('vase.tif');
+astronaut = imread('astronaut.tif');
+% input_img = testpattern512; 
+% input_img = vase; 
+% input_img = astronaut;
+% vase = imread(Tiff('vase.tif', 'r'));
+
+hw3_b(double(testpattern512), 'testpattern512')
+%
+%%
+%
+figure, histogram(testpattern512), title('testpattern512')
+%
+%%
+%
+hw3_b(double(vase), 'vase')
+%
+%%
+%
+figure, histogram(vase), title('vase')
+%
+%%
+%
+hw3_b(double(astronaut), 'astronaut')
+%
+%%
+%
+figure, histogram(astronaut), title('astronaut')
+
+%% _Part(ab)_
+%
+% - As it can be seen in all the images above, Lloyd Max quantization does
+% better than uniform quantization in general. This is expected, because
+% llyod considers the probability distribution of each pixel points and
+% quantize the points based on that distrubution. Basically, if we see the
+% histograms of these images, there are some parts which are densely
+% populated, so for these parts llyod assigns more quantization levels, and
+% for the less dense areas we don't see steps that closer to each other.
+% This makes a use difference and help with the MSE as it can be seen from
+% the MSE plots. This is actually very avidant in testpattern and astronut
+% pictures and mse plots. 
+% - Looking at the historgram of vase and it's MSE, we
+% can see that the hist is more uniformly distributed compared to
+% testpattern, and therefore, uniform or llyod are not much different.
+% While the mse plots of other two has some kind of spike where we have the
+% uneven distribution in the histogram. And since uniform doesn't take
+% these densly populated area into consideration, it had the highest mse 
+% difference compare to llyod in those regions. 
+% 
+% 
+% Looking at techinical terms, we satisdfy noth nearest neighbor and
+% centroid conditions in llyod, while only the centroid in uniform
+% quantization. 
+% 
+
+
+%% __Part(c)__
+%
+% - We see that for the testpattern image, from bit-2 to bit-3 the mse 
+% increases for the uniform quantizer. This is probably because of the for
+% bit-2 the quantization levels were probably closer to the dense
+% areas/spike areas, while futher in the other one, leading to increased
+% mse for the latter. 
+%
+% - Although we don't see Lloyd quantizer getting worse for increasing bit
+% rate, it might happen where there is an increase in mse. Let us say, 
+% the tie breaking rule for the boundary points, was decided such that it 
+% didn't work in the favor of those 'dense/spike' areas. We might still
+% converge but it might not be the best. Also, some initial assumptions
+% could turn up these results. 
+%
+%
+%%
+%
+function [] = hw3_b(input_img, name)
+    
+    mse=[];
+    for s = 1:7
+        output_img = Uniform_Quantizer2(uint8(input_img), s);
+        mse(end+1) = immse(output_img, uint8(input_img));
+    end 
+    
+    x=1:1:7;
+    figure,
+    plot(x,mse)
+    hold on; 
+    
+    mse_lloyd=[];
+    for s = 1:7 
+        
+        [N,M] = size(input_img);
+        training_set = reshape(input_img,N*M,1);
+        
+        [partition, codebook] = lloyds(training_set, pow2(s)); 
+        lloyd_output = zeros(N,M); 
+    
+        for ii = 1:N
+            for jj = 1:M
+                value = input_img(ii,jj); 
+                idx = 1; 
+                while idx <= length(partition) && value>partition(idx)
+                    % when it is outside the bounds 
+                    idx = idx + 1; 
+                end
+                lloyd_output(ii,jj) = codebook(idx);  
+            end
+        end 
+        
+        lloyd_output = uint8(lloyd_output);
+        mse_lloyd(end+1)= immse(lloyd_output, uint8(input_img));
+    end
+    
+    plot(x,mse_lloyd)
+    legend("Uniform","Lloyd"), 
+    str = sprintf('MSE Values for the image: %s', name);
+    title(str); 
+    
+    figure, 
+    str = sprintf('Uniform image of: %s ', name);
+    imshow(output_img, [0,256]), title(str); 
+    
+    figure,
+    str = sprintf('lloyd image of:  %s', name);
+    imshow(lloyd_output, [0,256]), title(str); 
+
+
+end
+
+%%
+
+function [output_img] = Uniform_Quantizer2(input_img, s)
+
+input_img = uint8(input_img);
+% Write a function that takes as inputs an 8-bit image and a scalar 
+% s ∈ [1,7] and performs uniform quantization so that the output is 
+% quantized to a s-bit image.
+
+output_img = idivide(input_img, pow2(8-s)).*pow2(8-s); %round off  
+output_img = output_img + pow2(8-s-1);
+
+end 
+##### SOURCE END #####
+--></body></html>
