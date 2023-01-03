@@ -1,0 +1,414 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>HW6_code</title><meta name="generator" content="MATLAB 9.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-11-28"><meta name="DC.source" content="HW6_code.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">ECE 253 Homework 6</a></li><li><a href="#2"><i>_Part(c)</i>_</a></li><li><a href="#3"><i>_Part(d)</i>_</a></li></ul></div><h2 id="1">ECE 253 Homework 6</h2><p><i><b>Shivani Bhakta</b></i> A13832428</p><pre class="codeinput"><span class="comment">% __Part(a)__</span>
+clear, clc, close <span class="string">all</span>;
+img = imread(<span class="string">'totem-poles.tif'</span>);
+
+
+[N,M] = size(img);
+numPixel = N * M;
+fprintf(<span class="string">'Number of pixels in the image totem-poles.tif are %d. \n\n'</span>, numPixel)
+numBytes = dir(<span class="string">'totem-poles.tif'</span>).bytes;
+fprintf(<span class="string">'The image occupies %d bytes. \n\n'</span>, numBytes)
+fprintf(<span class="string">'This means that the image occupies %d bits. \n\n'</span>, numBytes*8)
+
+fprintf(<span class="string">'This means that the image occupies %d bits per pixel.\n\n'</span>, numBytes*8/numPixel)
+
+
+
+<span class="comment">% __Part(b)__</span>
+<span class="comment">%</span>
+<span class="comment">% imwrite(img,'totem50.jpg','Quality',50)</span>
+<span class="comment">% totem50 = imread('totem50.jpg');</span>
+<span class="comment">% impsnr50 = psnr(img,totem50,255);</span>
+<span class="comment">%</span>
+<span class="comment">% [N,M] = size(totem50);</span>
+<span class="comment">% numPixel = N * M;</span>
+<span class="comment">% numBytes = dir('totem50.jpg').bytes;</span>
+<span class="comment">% bpp = numBytes*8/numPixel ;</span>
+<span class="comment">%</span>
+<span class="comment">% imwrite(img,'totem1.jpg','Quality',1)</span>
+<span class="comment">% totem1 = imread('totem1.jpg');</span>
+<span class="comment">% impsnr1 = psnr(img,totem1,255);</span>
+<span class="comment">%</span>
+<span class="comment">% imwrite(img,'totem5.jpg','Quality',5)</span>
+<span class="comment">% totem5 = imread('totem5.jpg');</span>
+<span class="comment">% impsnr5 = psnr(img,totem5,255);</span>
+<span class="comment">%</span>
+<span class="comment">% imwrite(img,'totem10.jpg','Quality',10)</span>
+<span class="comment">% totem10 = imread('totem10.jpg');</span>
+<span class="comment">% impsnr10 = psnr(img,totem10,255);</span>
+<span class="comment">%</span>
+<span class="comment">% imwrite(img,'totem20.jpg','Quality',20)</span>
+<span class="comment">% totem20 = imread('totem20.jpg');</span>
+<span class="comment">% impsnr20 = psnr(img,totem20,255);</span>
+<span class="comment">%</span>
+<span class="comment">% imwrite(img,'totem30.jpg','Quality',30)</span>
+<span class="comment">% totem30 = imread('totem50.jpg');</span>
+<span class="comment">% impsnr30 = psnr(img,totem30,255);</span>
+<span class="comment">%</span>
+<span class="comment">% imwrite(img,'totem70.jpg','Quality',70)</span>
+<span class="comment">% totem70 = imread('totem70.jpg');</span>
+<span class="comment">% impsnr70 = psnr(img,totem70,255);</span>
+
+fprintf(<span class="string">'Quality Factor   bytes          bpp              PSNR \n\n'</span>);
+
+itable = zeros(7,4);
+count = 1;
+<span class="keyword">for</span> ii = [1, 5, 10, 20, 30, 50, 70]
+
+    name = strcat(<span class="string">'totem'</span>,int2str(ii), <span class="string">'.jpg'</span>);
+    imwrite(img,name,<span class="string">'Quality'</span>,ii);
+    totem = imread(name);
+    impsnr = psnr(img,totem,255);
+    numBytes = dir(name).bytes;
+    bpp =  numBytes*8/numPixel;
+    fprintf(<span class="string">'%d                %d       %d       %d \n \n'</span>, ii, numBytes, bpp, impsnr);
+
+    itable(count,:) = [ii, numBytes, bpp, impsnr];
+    count = count + 1;
+<span class="keyword">end</span>
+figure()
+plot(itable(:,end-1), itable(:,end), <span class="string">'-*'</span>), grid <span class="string">on</span>,
+xlabel(<span class="string">'bpp'</span>), ylabel(<span class="string">'PSNR (dB)'</span>), title(<span class="string">'PSNR vs bpp of an image'</span>)
+
+fprintf(<span class="string">'the PSNR doesnot increase linearly \n\n\n'</span>)
+</pre><pre class="codeoutput">Number of pixels in the image totem-poles.tif are 480000. 
+
+The image occupies 508688 bytes. 
+
+This means that the image occupies 4069504 bits. 
+
+This means that the image occupies 8.478133e+00 bits per pixel.
+
+Quality Factor   bytes          bpp              PSNR 
+
+1                7829       1.304833e-01       2.337003e+01 
+ 
+5                10920       1.820000e-01       2.602298e+01 
+ 
+10                16377       2.729500e-01       2.875883e+01 
+ 
+20                25393       4.232167e-01       3.109611e+01 
+ 
+30                34108       5.684667e-01       3.263098e+01 
+ 
+50                54734       9.122333e-01       3.477501e+01 
+ 
+70                67046       1.117433e+00       4.435494e+01 
+ 
+the PSNR doesnot increase linearly 
+
+
+</pre><img vspace="5" hspace="5" src="HW6_code_01.png" alt=""> <h2 id="2"><i>_Part(c)</i>_</h2><pre class="codeinput">figure()
+plot( itable(:,end-1), itable(:,end), <span class="string">'-*b'</span>), grid <span class="string">on</span>, hold <span class="string">on</span>;
+
+fprintf(<span class="string">'First let us downsample by a factor of 2.......\n\n'</span>)
+totemhalf = imresize(img,0.5);
+
+fprintf(<span class="string">'Quality Factor   bytes          bpp              PSNR \n\n'</span>);
+
+itable = zeros(5,4);
+count = 1;
+<span class="keyword">for</span> ii = [10, 20, 30, 50, 80]
+
+    name = strcat(<span class="string">'totemS'</span>,int2str(ii), <span class="string">'.jpg'</span>);
+    imwrite(totemhalf,name,<span class="string">'Quality'</span>,ii)
+    impsnr = psnr(img,imresize(imread(name),2),255);
+
+    numBytes = dir(name).bytes;
+    bpp =  numBytes*8/numPixel;
+    fprintf(<span class="string">'%d                %d       %d       %d \n \n'</span>, ii, numBytes, bpp, impsnr);
+    itable(count,:) = [ii, numBytes, bpp, impsnr];
+    count = count + 1;
+<span class="keyword">end</span>
+
+
+plot(itable(:,end-1), itable(:,end), <span class="string">'-xr'</span>), hold <span class="string">on</span>;
+
+
+fprintf(<span class="string">'Now let us downsample by a factor of 4.......\n'</span>)
+totemquarter = imresize(img,0.25);
+
+fprintf(<span class="string">'Quality Factor   bytes          bpp              PSNR \n\n'</span>);
+
+itable = zeros(4,4);
+count = 1;
+<span class="keyword">for</span> ii = [20, 50, 80, 100]
+
+    name = strcat(<span class="string">'totemS'</span>,int2str(ii), <span class="string">'.jpg'</span>);
+    imwrite(totemquarter,name,<span class="string">'Quality'</span>,ii)
+    impsnr = psnr(img,imresize(imread(name),4),255);
+
+    numBytes = dir(name).bytes;
+    bpp =  numBytes*8/numPixel;
+    fprintf(<span class="string">'%d                %d       %d       %d \n \n'</span>, ii, numBytes, bpp, impsnr);
+    itable(count,:) = [ii, numBytes, bpp, impsnr];
+    count = count + 1;
+<span class="keyword">end</span>
+
+plot(itable(:,end-1), itable(:,end), <span class="string">'-om'</span>), grid <span class="string">on</span>, hold <span class="string">on</span>;
+xlabel(<span class="string">'bpp'</span>), ylabel(<span class="string">'PSNR (dB)'</span>),
+legend(<span class="string">'Original'</span>, <span class="string">'downsample by F = 2'</span>, <span class="string">'downsample by F = 4'</span>),
+title(<span class="string">'PSNR vs bpp of an image'</span>)
+</pre><pre class="codeoutput">First let us downsample by a factor of 2.......
+
+Quality Factor   bytes          bpp              PSNR 
+
+10                5268       8.780000e-02       2.578643e+01 
+ 
+20                8072       1.345333e-01       2.731809e+01 
+ 
+30                10375       1.729167e-01       2.804841e+01 
+ 
+50                14043       2.340500e-01       2.885524e+01 
+ 
+80                23635       3.939167e-01       3.009695e+01 
+ 
+Now let us downsample by a factor of 4.......
+Quality Factor   bytes          bpp              PSNR 
+
+20                2631       4.385000e-02       2.403437e+01 
+ 
+50                4439       7.398333e-02       2.524381e+01 
+ 
+80                7192       1.198667e-01       2.608656e+01 
+ 
+100                23069       3.844833e-01       2.661314e+01 
+ 
+</pre><img vspace="5" hspace="5" src="HW6_code_02.png" alt=""> <h2 id="3"><i>_Part(d)</i>_</h2><pre class="codeinput">fprintf(<span class="string">'Let us look at the totem1 img'</span>);
+figure()
+imshow(<span class="string">"totem1.jpg"</span>)
+</pre><pre class="codeoutput">Let us look at the totem1 img</pre><img vspace="5" hspace="5" src="HW6_code_03.png" alt=""> <p>As we can see from the image, the image is very blocky, and has a low PSNR of 23,37. This means that doing some filtering at the boundaries might help improve the image quality. We can use kindof a mean filtering here. Where we take the edges of the block and smoothed it out by replacing it with the mean of surrounding pixels.</p><pre class="codeinput">totem1 = double(imread(<span class="string">"totem1.jpg"</span>));
+BW = double(edge(imread(<span class="string">"totem1.jpg"</span>)));
+filtered_img = imfilter(totem1+BW, [3,3]);
+figure()
+imshow(filtered_img)
+</pre><img vspace="5" hspace="5" src="HW6_code_04.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2022b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% ECE 253 Homework 6 
+% _*Shivani Bhakta*_
+% A13832428
+
+% __Part(a)__
+clear, clc, close all; 
+img = imread('totem-poles.tif');
+
+
+[N,M] = size(img); 
+numPixel = N * M;
+fprintf('Number of pixels in the image totem-poles.tif are %d. \n\n', numPixel)
+numBytes = dir('totem-poles.tif').bytes;
+fprintf('The image occupies %d bytes. \n\n', numBytes)
+fprintf('This means that the image occupies %d bits. \n\n', numBytes*8)
+
+fprintf('This means that the image occupies %d bits per pixel.\n\n', numBytes*8/numPixel)
+
+
+
+% __Part(b)__
+% 
+% imwrite(img,'totem50.jpg','Quality',50)
+% totem50 = imread('totem50.jpg');
+% impsnr50 = psnr(img,totem50,255);
+% 
+% [N,M] = size(totem50); 
+% numPixel = N * M;
+% numBytes = dir('totem50.jpg').bytes;
+% bpp = numBytes*8/numPixel ;
+% 
+% imwrite(img,'totem1.jpg','Quality',1)
+% totem1 = imread('totem1.jpg');
+% impsnr1 = psnr(img,totem1,255);
+% 
+% imwrite(img,'totem5.jpg','Quality',5)
+% totem5 = imread('totem5.jpg');
+% impsnr5 = psnr(img,totem5,255);
+% 
+% imwrite(img,'totem10.jpg','Quality',10)
+% totem10 = imread('totem10.jpg');
+% impsnr10 = psnr(img,totem10,255);
+% 
+% imwrite(img,'totem20.jpg','Quality',20)
+% totem20 = imread('totem20.jpg');
+% impsnr20 = psnr(img,totem20,255);
+% 
+% imwrite(img,'totem30.jpg','Quality',30)
+% totem30 = imread('totem50.jpg');
+% impsnr30 = psnr(img,totem30,255);
+% 
+% imwrite(img,'totem70.jpg','Quality',70)
+% totem70 = imread('totem70.jpg');
+% impsnr70 = psnr(img,totem70,255);
+
+fprintf('Quality Factor   bytes          bpp              PSNR \n\n');
+
+itable = zeros(7,4);
+count = 1;
+for ii = [1, 5, 10, 20, 30, 50, 70]
+    
+    name = strcat('totem',int2str(ii), '.jpg');
+    imwrite(img,name,'Quality',ii); 
+    totem = imread(name);
+    impsnr = psnr(img,totem,255);
+    numBytes = dir(name).bytes;
+    bpp =  numBytes*8/numPixel;
+    fprintf('%d                %d       %d       %d \n \n', ii, numBytes, bpp, impsnr);
+ 
+    itable(count,:) = [ii, numBytes, bpp, impsnr];
+    count = count + 1;
+end
+figure()
+plot(itable(:,end-1), itable(:,end), '-*'), grid on,  
+xlabel('bpp'), ylabel('PSNR (dB)'), title('PSNR vs bpp of an image')
+
+fprintf('the PSNR doesnot increase linearly \n\n\n') 
+
+%% __Part(c)__
+% 
+figure()
+plot( itable(:,end-1), itable(:,end), '-*b'), grid on, hold on; 
+
+fprintf('First let us downsample by a factor of 2.......\n\n')
+totemhalf = imresize(img,0.5);
+
+fprintf('Quality Factor   bytes          bpp              PSNR \n\n');
+
+itable = zeros(5,4);
+count = 1;
+for ii = [10, 20, 30, 50, 80]
+    
+    name = strcat('totemS',int2str(ii), '.jpg');
+    imwrite(totemhalf,name,'Quality',ii)
+    impsnr = psnr(img,imresize(imread(name),2),255);
+
+    numBytes = dir(name).bytes;
+    bpp =  numBytes*8/numPixel;
+    fprintf('%d                %d       %d       %d \n \n', ii, numBytes, bpp, impsnr);
+    itable(count,:) = [ii, numBytes, bpp, impsnr];
+    count = count + 1;
+end
+
+
+plot(itable(:,end-1), itable(:,end), '-xr'), hold on;  
+
+
+fprintf('Now let us downsample by a factor of 4.......\n')
+totemquarter = imresize(img,0.25);
+
+fprintf('Quality Factor   bytes          bpp              PSNR \n\n');
+
+itable = zeros(4,4);
+count = 1;
+for ii = [20, 50, 80, 100]
+    
+    name = strcat('totemS',int2str(ii), '.jpg');
+    imwrite(totemquarter,name,'Quality',ii)
+    impsnr = psnr(img,imresize(imread(name),4),255);
+
+    numBytes = dir(name).bytes;
+    bpp =  numBytes*8/numPixel;
+    fprintf('%d                %d       %d       %d \n \n', ii, numBytes, bpp, impsnr);
+    itable(count,:) = [ii, numBytes, bpp, impsnr];
+    count = count + 1;
+end
+
+plot(itable(:,end-1), itable(:,end), '-om'), grid on, hold on;  
+xlabel('bpp'), ylabel('PSNR (dB)'), 
+legend('Original', 'downsample by F = 2', 'downsample by F = 4'), 
+title('PSNR vs bpp of an image')
+
+
+
+%% __Part(d)__
+
+fprintf('Let us look at the totem1 img'); 
+figure()
+imshow("totem1.jpg")
+
+%%
+%
+% As we can see from the image, the image is very blocky, and has a low
+% PSNR of 23,37. This means that doing some filtering at the boundaries
+% might help improve the image quality. We can use kindof a mean filtering
+% here. Where we take the edges of the block and smoothed it out by
+% replacing it with the mean of surrounding pixels. 
+%
+
+%%
+totem1 = double(imread("totem1.jpg"));
+BW = double(edge(imread("totem1.jpg"))); 
+filtered_img = imfilter(totem1+BW, [3,3]); 
+figure()
+imshow(filtered_img)
+
+
+##### SOURCE END #####
+--></body></html>
